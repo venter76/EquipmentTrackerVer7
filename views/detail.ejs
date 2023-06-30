@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/public/styles.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <style>
+
+    .moved-text-box {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #f8f9fa;
+      padding: 10px 20px;
+      border: 1px solid #ced4da;
+      border-radius: 5px;
+      font-size: 18px;
+      visibility: hidden;
+      z-index: 9999;
+      animation: fadeOut 1s ease-in-out;
+    }
+    
+    @keyframes fadeOut {
+      0% { opacity: 1; }
+      90% { opacity: 1; }
+      100% { opacity: 0; visibility: hidden; }
+    }
+
+    .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255, 255, 255, 1)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+  }
+
+    </style>
+
+
+    <title>Document</title>
+</head>
+
+<header>
+
+  <nav class="navbar">
+      <!-- fixed-top bg-body-tertiary"> -->
+         <div class="container-fluid">
+           
+           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+             <span class="navbar-toggler-icon"></span>
+           </button>
+           <div class="collapse navbar-collapse" id="navbarNav">
+             <ul class="navbar-nav">
+                 <li class="nav-item">
+                 
+                     <form action="/" method="get">
+                       <button type="submit" class="nav-link btn btn-link text-white">Home</button>
+                     </form>
+                   </li>
+ 
+               <li class="nav-item">
+ 
+                 <form action="/link1" method="get">
+                   <button type="submit" class="nav-link btn btn-link text-white">Booking List</button>
+                 </form>
+               </li>
+               <li class="nav-item">
+                 <form action="/link2" method="get">
+                   <button type="submit" class="nav-link btn btn-link text-white">Noticeboard</button>
+                 </form>
+               </li>
+             </ul>
+           </div>
+         </div>
+       </nav> 
+  </header>
+
+
+
+  <body class="bg-dark">
+
+    <div class="container">
+     
+            <h2 class="text-center text-white"><%= itemName %></h2>
+            <table class="table table-primary table-hover table-bordered custom-table">
+
+              <tr>
+                 <form action="/detailmove" method="post">
+                <td class="fs-3">Move to:</td>
+                <td>
+                  <select name="theatre"class="form-select form-select-lg" >
+                    <option value="A">A</option>
+                    <option value="B">B</option>
+                    <option value="C">C</option>
+                    <option value="D">D</option>
+                    <option value="E">E</option>
+                    <option value="F">F</option>
+                    <option value="G">G</option>
+                    <option value="H">H</option>
+                    <option value="O">O</option>
+                    <option value="P">P</option>
+                    <option value="Q">Q</option>
+                    <option value="R">R</option>
+                    <option value="S">S</option>
+                    <option value="T">T</option>
+                    <option value="U">U</option>
+                    <option value="V">V</option>
+                    <option value="W">W</option>
+                    <option value="X">X</option>
+                    <option value="Y">Y</option>
+                    <option value="Z">Z</option>
+                    <option value="C1A">T</option>
+                    <option value="C3B">U</option>
+                    <option value="C4B">V</option>
+                    <option value="C2A">C2A</option>
+                    <option value="C5B">X</option>
+                    <option value="Ward">Ward</option>
+                    <option value="PACU">PACU</option>
+                    <option value="6th">6th</option>
+                    <option value="C8B">C8B</option>
+                    <option value="ECT">ECT</option>
+                    <option value="A5">A5</option>
+                   
+                  </select>
+                </td>
+                <td>
+                  <input type="hidden" name="itemName" value="<%= itemName %>">
+                  <button type="submit" class="btn btn-primary btn-sm">Submit</button>
+                </td>
+                 </form>
+              
+              </tr>
+            
+            
+              
+                <tr>
+                  <form action="/detailbook" method="post">
+                  <td class="fs-3">Make a booking:</td>
+                  <td>
+                    <input type="datetime-local" name="bookingDateTime">
+                  <br>
+                    <select name="theatreBook">
+                    <option value="A">A</option>
+                    <option value="B">B</option>
+                    <option value="C">C</option>
+                    <option value="D">D</option>
+                    <option value="E">E</option>
+                    <option value="F">F</option>
+                    <option value="G">G</option>
+                    <option value="H">H</option>
+                    <option value="O">O</option>
+                    <option value="P">P</option>
+                    <option value="Q">Q</option>
+                    <option value="R">R</option>
+                    <option value="S">S</option>
+                    <option value="T">T</option>
+                    <option value="U">U</option>
+                    <option value="V">V</option>
+                    <option value="W">W</option>
+                    <option value="X">X</option>
+                    <option value="Y">Y</option>
+                    <option value="Z">Z</option>
+                    <option value="C1A">T</option>
+                    <option value="C3B">U</option>
+                    <option value="C4B">V</option>
+                    <option value="C2A">C2A</option>
+                    <option value="C5B">X</option>
+                    <option value="Ward">Ward</option>
+                    <option value="PACU">PACU</option>
+                    <option value="6th">6th</option>
+                    <option value="C8B">C8B</option>
+                    <option value="ECT">ECT</option>
+                    <option value="A5">A5</option>
+                   
+                    
+                    </select>
+                    <div id="error-message" class="text-danger"></div>
+                  </td>
+                  <td>
+                      <input type="hidden" name="itemName" value="<%= itemName %>">
+                      <button type="submit" class="btn btn-primary btn-sm">Submit</button>
+                  </td>
+                  </form>
+                    
+                  
+                </tr>
+                
+                
+            
+              </tr>
+
+              <tr>
+                <td class="fs-3">Info:</td>
+                <td colspan="2">
+                  <ul>
+                    <% info.forEach(item => { %>
+                      <li>Make: <%= item.make %></li>
+                      <li>Specs: <%= item.specs %></li>
+                      <li>Note: <%= item.note %></li>
+                      <br>
+                    <% }); %>
+                  </ul>
+                </td>
+              </tr>
+              
+
+              <!-- <tr>
+                <td class="fs-3">Info:</td>
+                <td colspan="2"><%= info %></td>
+            </tr> -->
+              
+            </table>
+            
+          
+    </div>
+
+    
+
+          
+               
+            
+
+
+    <script src="app.js"></script>
+   
+
+
+     
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous">
+        </script>
+
+
+
+        
+</body>
+
+<footer class="sticky-footer bg-light">
+  <div class="container-fluid">
+    <div class="row justify-content-end">
+      <div class="col-auto">
+        <h6>Bray Street Solutions 2023</h6>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+</html>
