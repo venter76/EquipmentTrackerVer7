@@ -7,6 +7,7 @@ require('dotenv').config();
   
 
 const app = express();
+const PORT = process.env.PORT || 3000
 app.set('view engine', 'ejs');
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({extended: true}));
@@ -18,29 +19,37 @@ const db_password = process.env.DB_PASSWORD;
 const db_cluster_url = process.env.DB_CLUSTER_URL;
 const db_name = process.env.DB_NAME;
 
-mongoose.connect(`mongodb+srv://${db_username}:${db_password}@${db_cluster_url}/${db_name}?retryWrites=true&w=majority`, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-})
-.then(() => {
-  console.log('Connected to MongoDB Atlas');
-})
-.catch((error) => {
-  console.error('Error connecting to MongoDB Atlas:', error);
-});
+
+const connectDB = async () => {
+  try {
+    const conn = await mongoose.connect(`mongodb+srv://${db_username}:${db_password}@${db_cluster_url}/${db_name}?retryWrites=true&w=majority`, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true
+    });
+
+    console.log('Connected to MongoDB Atlas:', conn.connection.host);
+  } catch (error) {
+    console.error('Error connecting to MongoDB Atlas:', error);
+    process.exit(1);
+  }
+};
 
 
 
-// mongoose.connect(
+// mongoose.connect(`mongodb+srv://${db_username}:${db_password}@${db_cluster_url}/${db_name}?retryWrites=true&w=majority`, {
+//   useNewUrlParser: true,
+//   useUnifiedTopology: true
+// })
+// .then(() => {
+//   console.log('Connected to MongoDB Atlas');
+// })
+// .catch((error) => {
+//   console.error('Error connecting to MongoDB Atlas:', error);
+// });
 
-//     "mongodb+srv://stephenventer:dblucca@clustermed.ftujogl.mongodb.net/equipment?retryWrites=true&w=majority",
-//     )
-    
-  
-  
 
-  // const now = new Date();
-  // const offset = now.getTimezoneOffset();
+
+
 
   const equipmentSchema = new mongoose.Schema({
     itemName: String,
@@ -344,12 +353,20 @@ app.get('/link2', async (req, res) => {
 // const localNow = new Date(record.date.getTime() - (record.offset * 60000));
 // console.log(localNow);
 
+connectDB().then(() => {
+  app.listen(PORT, () => {
+      console.log("listening for requests");
+  })
+})
 
-const port = process.env.PORT || 3000;
 
-app.listen(port, function(){
-  console.log("Server started on port " + port);
-});
+
+
+// const port = process.env.PORT || 3000;
+
+// app.listen(port, function(){
+//   console.log("Server started on port " + port);
+// });
 
 
   // app.listen(3000, function(){
