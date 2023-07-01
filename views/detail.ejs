@@ -79,12 +79,12 @@
 
     <div class="container">
      
-            <h2 class="text-center text-white"><%= itemName %></h2>
+            <h3 class="text-center text-white"><%= itemName %></h3>
             <table class="table table-primary table-hover table-bordered custom-table">
 
               <tr>
                  <form action="/detailmove" method="post">
-                <td class="fs-3">Move to:</td>
+                <td class="fs-2">Move to:</td>
                 <td>
                   <select name="theatre"class="form-select form-select-lg" >
                     <option value="A">A</option>
@@ -121,7 +121,7 @@
                    
                   </select>
                 </td>
-                <td>
+                <td style="text-align: center;">
                   <input type="hidden" name="itemName" value="<%= itemName %>">
                   <button type="submit" class="btn btn-primary btn-sm">Submit</button>
                 </td>
@@ -129,11 +129,11 @@
               
               </tr>
             
-            <tr><br></tr>
+          
               
                 <tr>
                   <form action="/detailbook" method="post">
-                  <td class="fs-3">Make a booking:</td>
+                  <td class="fs-2">Make a booking:</td>
                   <td>
                     <input type="datetime-local" name="bookingDateTime">
                   <br>
@@ -174,7 +174,7 @@
                     </select>
                     <div id="error-message" class="text-danger"></div>
                   </td>
-                  <td>
+                  <td style="text-align: center;">
                       <input type="hidden" name="itemName" value="<%= itemName %>">
                       <button type="submit" class="btn btn-primary btn-sm">Submit</button>
                   </td>
@@ -188,7 +188,7 @@
               </tr>
 
               <tr>
-                <td class="fs-3">Info:</td>
+                <td class="fs-2">Info:</td>
                 <td colspan="2">
                   <ul>
                     <% info.forEach(item => { %>
@@ -237,7 +237,7 @@
   <div class="container-fluid">
     <div class="row justify-content-end">
       <div class="col-auto">
-        <h6>Bray Street Solutions 2023</h6>
+        <h6>Bray Road Solutions 2023</h6>
       </div>
     </div>
   </div>
