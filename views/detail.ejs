@@ -84,9 +84,9 @@
 
               <tr>
                  <form action="/detailmove" method="post">
-                <td class="fs-2">Move to:</td>
+                <td class="fs-6">Move to:</td>
                 <td>
-                  <select name="theatre"class="form-select form-select-lg" >
+                  <select name="theatre"class="form-select form-select-sm" style="width: 200px;">
                     <option value="A">A</option>
                     <option value="B">B</option>
                     <option value="C">C</option>
@@ -118,6 +118,7 @@
                     <option value="C8B">C8B</option>
                     <option value="ECT">ECT</option>
                     <option value="A5">A5</option>
+                    <option value="Faulty">Faulty</option>
                    
                   </select>
                 </td>
@@ -133,7 +134,7 @@
               
                 <tr>
                   <form action="/detailbook" method="post">
-                  <td class="fs-2">Make a booking:</td>
+                  <td class="fs-6">Make a booking:</td>
                   <td>
                     <input type="datetime-local" name="bookingDateTime">
                   <br>
@@ -188,7 +189,7 @@
               </tr>
 
               <tr>
-                <td class="fs-2">Info:</td>
+                <td class="fs-6">Info:</td>
                 <td colspan="2">
                   <ul>
                     <% info.forEach(item => { %>
