@@ -87,6 +87,7 @@
                 <td class="fs-6">Move to:</td>
                 <td>
                   <select name="theatre"class="form-select form-select-sm" style="width: 150px;">
+                    <option selected disabled value="">Theatre</option>
                     <option value="A">A</option>
                     <option value="B">B</option>
                     <option value="C">C</option>
@@ -129,16 +130,18 @@
                  </form>
               
               </tr>
-            
-          
+              </table>
+            <br>
+              <table class="table table-primary table-hover table-bordered custom-table">
               
                 <tr>
                   <form action="/detailbook" method="post">
                   <td class="fs-6">Make a booking:</td>
                   <td>
-                    <input type="datetime-local" name="bookingDateTime" style="width: 150px;">
+                    <input type="datetime-local" name="bookingDateTime" style="width: 105px;">
                   <br>
-                    <select name="theatreBook">
+                    <select name="theatreBook" style="width: 105px;">
+                    <option selected disabled value="">Theatre</option>
                     <option value="A">A</option>
                     <option value="B">B</option>
                     <option value="C">C</option>
@@ -183,9 +186,10 @@
                     
                   
                 </tr>
+                </table>
+                <br>
                 
-                
-            
+                <table class="table table-primary table-hover table-bordered custom-table">
               </tr>
 
               <tr>

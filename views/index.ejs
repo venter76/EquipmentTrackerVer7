@@ -15,12 +15,13 @@
   .navbar-toggler-icon {
     background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255, 255, 255, 1)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
   }
+
+  .myLink {
+    color: black;
+    text-decoration: none;
+}
+
 </style>
-
-
-    
-      
-    </style>
   
     
 </head>
@@ -80,34 +81,29 @@
 
  
 <br>
-    <div class="row">
-      <% itemNames.forEach(function(itemName, index) { %>
-      <div class="col-md-6 col-5">
-        <div class="p-3 mb-2 bg-dark-subtle text-black rounded-pill pill-box">
+<div class="row">
+  <% itemNames.forEach(function(itemName, index) { %>
+  <div class="col-md-8 col-9">
+      <div class="p-3 mb-2 text-black rounded-pill pill-box bg-<%= itemColours[index] %>">
           <div class="pill-box-content text-center">
-            <h7><%= itemName %></h7>
+              <a class="myLink" href="/detail?itemName=<%= encodeURIComponent(itemName) %>"><%= itemName %></a>
+              <!-- <h7><%= itemName %></h7> -->
           </div>
-        </div>
       </div>
-      <div class="col-md-4 col-3">
-        <% if (itemLocations[index]) { %>
-        <div class="p-3 mb-2 bg-dark-subtle text-black rounded-pill pill-box">
-          <div class="pill-box-content text-center">
-            <h6 class="item-locations"><%= itemLocations[index] %></h6>
-          </div>
-        </div>
-        <% } %>
-      </div>
-      <div class="col-md-2 col-2 d-flex align-items-center justify-content-center">
-        <div class="p-3 mb-2 bg-dark-subtle text-black rounded-pill pill-box">
-          <div class="pill-box-content">
-            <a href="/detail?itemName=<%= itemName %>" class="btn btn-outline-secondary btn-sm item-info">+</a>
-          </div>
-        </div>
-      </div>
-      <% }); %>
-    </div>
   </div>
+
+  <div class="col-md-4 col-3">
+    <% if (itemLocations[index]) { %>
+    <div class="p-3 mb-2 bg-dark-subtle text-black rounded-pill pill-box">
+      <div class="pill-box-content text-center">
+        <h6 class="item-locations"><%= itemLocations[index] %></h6>
+      </div>
+    </div>
+    <% } %>
+  </div>
+  <% }); %>
+</div>
+
   
 
     <script src="index.js"></script>

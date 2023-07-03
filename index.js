@@ -62,7 +62,8 @@ const connectDB = async () => {
     }],
     booked: String,
     theatre: String,
-    date: Date
+    date: Date,
+    colour: String,
     });
   
   
@@ -120,13 +121,13 @@ const connectDB = async () => {
 
   app.get("/", function(req, res){
 
-    Equipment.find({}, 'itemName itemLocation')
+    Equipment.find({}, 'itemName itemLocation colour')
     .then(data => {
       const itemNames = data.map(item => item.itemName);
       const itemLocations = data.map(item => item.itemLocation);
-      
+      const itemColours = data.map(item => item.colour);
 
-      res.render('index', { itemNames, itemLocations});
+      res.render('index', { itemNames, itemLocations, itemColours});
     })
     .catch(err => {
       console.error(err);
