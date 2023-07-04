@@ -158,6 +158,9 @@ app.get('/logo', (req, res) => {
   res.render('logo');
 });
 
+app.get('/logo2', (req, res) => {
+  res.render('logo2');
+});
 
 
 
@@ -220,7 +223,7 @@ app.post('/detailbook', async function(req, res) {
     // Handle success case
 
     
-    res.redirect('/link1');
+    res.redirect('/logo2');
 
   } catch (err) {
     console.log('Error creating booking:', err);
