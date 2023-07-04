@@ -154,7 +154,9 @@ app.get('/detail', (req, res) => {
 });
 
 
-
+app.get('/logo', (req, res) => {
+  res.render('logo');
+});
 
 
 
@@ -186,7 +188,7 @@ await move.save();
   
 
 
-res.redirect("/");
+res.redirect("/logo");
 
 
 
