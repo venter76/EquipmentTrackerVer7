@@ -17,6 +17,13 @@
     <h1> Moving ... </h1>  
   
     <img src="/NXRX.gif" alt="Moving ...">
+
+    <script src="/socket.io/socket.io.js"></script>
+<script>
+  const socket = io();
+
+  socket.emit('my event', {data: 'Hello, server!'});
+</script>
   </body>
-</body>
+
 </html>

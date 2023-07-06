@@ -1,13 +1,35 @@
 const express = require('express');
+const http = require('http');
+const socketIO = require('socket.io');
 const bodyParser = require('body-parser');
 const mongoose = require("mongoose");
 const moment = require('moment');
 require('dotenv').config();
 
   
-
 const app = express();
+const server = http.createServer(app);
+const io = socketIO(server);  // Here's where Socket.IO is being integrated.
+
 const PORT = process.env.PORT || 3000
+io.on('connection', (socket) => {
+  console.log('a user connected');
+
+  // You can listen to custom events.
+  socket.on('my event', (data) => {
+    console.log(data);
+  });
+
+  socket.on('disconnect', () => {
+    console.log('user disconnected');
+  });
+});
+
+
+
+
+
+
 app.set('view engine', 'ejs');
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({extended: true}));
