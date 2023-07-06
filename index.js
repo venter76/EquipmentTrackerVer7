@@ -197,17 +197,7 @@ res.redirect("/logo");
 
 });
 
-app.get('/get-updated-locations', async (req, res) => {
-  console.log('Visited the /get-updated-locations route');
-  
-  // fetch the latest data from your database
-  const equipments = await Equipment.find({});
-  
-  
 
-  // send the data to the client
-  res.json(equipments);
-});
 
 
 
