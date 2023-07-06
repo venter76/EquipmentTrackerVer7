@@ -1,35 +1,13 @@
 const express = require('express');
-const http = require('http');
-const socketIO = require('socket.io');
 const bodyParser = require('body-parser');
 const mongoose = require("mongoose");
 const moment = require('moment');
 require('dotenv').config();
 
   
+
 const app = express();
-const server = http.createServer(app);
-const io = socketIO(server);  // Here's where Socket.IO is being integrated.
-
 const PORT = process.env.PORT || 3000
-io.on('connection', (socket) => {
-  console.log('a user connected');
-
-  // You can listen to custom events.
-  socket.on('my event', (data) => {
-    console.log(data);
-  });
-
-  socket.on('disconnect', () => {
-    console.log('user disconnected');
-  });
-});
-
-
-
-
-
-
 app.set('view engine', 'ejs');
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({extended: true}));
@@ -184,42 +162,40 @@ app.get('/logo2', (req, res) => {
   res.render('logo2');
 });
 
+
+
 app.post("/detailmove", async function(req, res) {
   const itemName = req.body.itemName;
   const selectedTheatre = req.body.theatre;
   console.log(selectedTheatre, itemName);
 
-  try {
-    const updatedEquipment = await Equipment.findOneAndUpdate(
-      { itemName: itemName }, // Find the document with the specified itemName
-      { $set: { itemLocation: selectedTheatre } }, // Update the itemLocation field
-      { new: true } // Return the updated document
-    );
 
-    console.log(updatedEquipment);
+  Equipment.findOneAndUpdate(
+    { itemName: itemName }, // Find the document with the specified itemName
+    { $set: { itemLocation: selectedTheatre } }, // Update the itemLocation field
+    { new: true } // Return the updated document
+    ).then(updatedEquipment => {
+      console.log(updatedEquipment);
+    });
 
-    const move = new Move({
+
+      const move = new Move({
       itemName: itemName,
       theatre: selectedTheatre,
       date: new Date()
-    });
-
-    // Save the Move document
-    await move.save();
-
-    io.emit('equipment moved', updatedEquipment);
-
-    res.redirect("/logo");
-
-  } catch (error) {
-    console.error(error);
-    // Handle error
-  }
 });
 
+// Save the Move document
+await move.save();
+
+  
+
+
+res.redirect("/logo");
 
 
 
+});
 
 
 
