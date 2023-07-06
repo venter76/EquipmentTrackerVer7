@@ -109,6 +109,26 @@
     <script src="index.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous">
         </script>
+        <script>
+          // update every 5 seconds
+          setInterval(function() {
+            fetch('/get-updated-locations')
+              .then(response => response.json())
+              .then(equipments => {
+                equipments.forEach(equipment => {
+                  // Update the DOM with the new itemLocation
+                  // You need to ensure that the DOM elements you want to update have unique ids or classes to identify them
+                  // For simplicity, I'm assuming that each itemLocation has a unique id in the form "location-" + itemName
+                  // and replacing any spaces with underscores to ensure valid ids
+                  const element = document.getElementById("location-" + equipment.itemName.replace(/\s/g, '_'));
+                  if(element) {
+                      element.textContent = equipment.itemLocation;
+                  }
+                });
+              });
+          }, 5000);
+        </script>
+        
 </body>
 
 <footer class="sticky-footer bg-light">
