@@ -36,19 +36,6 @@ const connectDB = async () => {
 
 
 
-// mongoose.connect(`mongodb+srv://${db_username}:${db_password}@${db_cluster_url}/${db_name}?retryWrites=true&w=majority`, {
-//   useNewUrlParser: true,
-//   useUnifiedTopology: true
-// })
-// .then(() => {
-//   console.log('Connected to MongoDB Atlas');
-// })
-// .catch((error) => {
-//   console.error('Error connecting to MongoDB Atlas:', error);
-// });
-
-
-
 
 
   const equipmentSchema = new mongoose.Schema({
@@ -352,9 +339,13 @@ app.get('/link2', async (req, res) => {
     }
     
     });
+
+
     
         
-
+app.get('/lift', (req, res) => {
+  res.render('lift');
+});
 
     
 
