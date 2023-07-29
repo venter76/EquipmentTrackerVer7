@@ -3,21 +3,9 @@
 
 [
 {
-"itemName": "Ultrasound ET",
-"itemLocation": "C",
-"status": 1,
-"info": [
-{
-"make": "Sonosite",
-"specs": "Linear and Cardiac probe",
-"note": "Store in ET Hotspot"
-}
-],
-"booked":"N",
-"theatre": null,
-"date": null
+"description": "String",
+"staff": "String",
 },
-
 {
 "itemName": "Ultrasound OET",
 "itemLocation": "U",

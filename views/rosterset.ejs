@@ -61,87 +61,63 @@
                   <button type="submit" class="nav-link btn btn-link text-white">Roster</button>
                 </form>
               </li>
-              <!-- <li class="nav-item">
-                <form action="/lift" method="get">
-                  <button type="submit" class="nav-link btn btn-link text-white">Lifts</button>
-                </form>
-              </li> -->
+             
             </ul>
           </div>
         </div>
       </nav> 
     
 </header>
-
 <body class="bg-dark">
-
-  <div class="container">
-    <div class="row">
-      <div class="col-md-10 col-10">
-        <h3 class="text-center text-white">Current Location</h3>
-        <p class="text-center text-white" style="font-size: 12px;">(Select the equipment name to move or to book)</h9>
-      </div>
-      <div class="col-md-2 col-2 d-flex align-items-center justify-content-end">
-        <form action="/" method="get">
-          <button type="submit" class="btn btn-outline-secondary">Refresh</button>
-        </form>
-      </div>
-    </div>
-    <br>
+  <h2 class="text-center text-white">Clinical Technologist Roster</h2>
 
 
- 
+    <div class="container">
 <br>
-<div class="row">
-  <% itemNames.forEach(function(itemName, index) { %>
-  <div class="col-md-8 col-9">
-      <div class="p-3 mb-2 text-black rounded-pill pill-box bg-<%= itemColours[index] %>">
-          <div class="pill-box-content text-center">
-              <a class="myLink" href="/detail?itemName=<%= encodeURIComponent(itemName) %>"><%= itemName %></a>
-              <!-- <h7><%= itemName %></h7> -->
-          </div>
-      </div>
-  </div>
-
-  <div class="col-md-4 col-3">
-    <% if (itemLocations[index]) { %>
-    <div class="p-3 mb-2 bg-dark-subtle text-black rounded-pill pill-box">
-      <div class="pill-box-content text-center">
-        <h6 class="item-locations"><%= itemLocations[index] %></h6>
-      </div>
+  <% rosters.forEach(function(roster) { %>
+    <div class="col-sm-12 col-md-6">
+        <div class="card mb-2" >
+            <div class="card-body">
+                <h6 class="card-title"><%= roster.description %></h6>
+                <p><%= roster.staff %></p>
+                <form action="/rosterchange" method="POST">
+                    <input type="hidden" name="description" value="<%= roster.description %>">
+                    <input type="hidden" name="staff" value="<%= roster.staff %>">
+                    <button type="submit" class="btn btn-primary">Change</button>
+                </form>
+                
+            </div>
+        </div>
     </div>
-    <% } %>
-  </div>
-  <% }); %>
+<% }); %>
+
+
+
+
+
+
+
+          
+                
+        
+        
+        
+            
+
+
+
 </div>
 
-  
-<script>
-  // Function to reload the page
-  function reloadHomePage() {
-    window.location.reload();
-  }
+<p class="text-white">WORKING HOURS: 7h00- 15h00 full staff component (Monday to Friday).
+                  15h00-20h00 overtime on site 1 x Clin Tech (Monday to Friday).
+                  08h00-13h00 Saturdays on site 1 x Clin Tech.
+                  09h00-13h00 Sundays and Public Holidays on site 1 x Clin Tech.s
+                  All hours Speed dial 3006
+                  
+                  
+                </p>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
 
-  
-  setInterval(reloadHomePage, 10000);
-</script>
-
-    <script src="index.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous">
-        </script>
-       
 </body>
-
-<footer class="sticky-footer bg-light">
-  <div class="container-fluid">
-    <div class="row justify-content-end">
-      <div class="col-auto">
-        <h6>Bray Road Solutions 2023</h6>
-      </div>
-    </div>
-  </div>
-</footer>
-
-
 </html>

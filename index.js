@@ -95,7 +95,16 @@ const connectDB = async () => {
   const Note = mongoose.model('Note', noteSchema);
 
 
+  const rosterSchema = new mongoose.Schema({
+    
+      description: String,
+      staff: String
+  
+    });
+      
 
+  
+  const Roster = mongoose.model('Roster', rosterSchema);
 
 
 
@@ -341,6 +350,67 @@ app.get('/link2', async (req, res) => {
     });
 
 
+   
+    app.get('/rosterset', async function(req, res) {
+      const rosters = await Roster.find({});
+      res.render('rosterset', {rosters: rosters});
+  });
+  
+    
+  app.post('/rosterchange', function(req, res) {
+    const description = req.body.description;
+    const staffName = req.body.staff;
+
+    console.log(description);
+    console.log(staffName);
+
+    // Use description and staffName in your handler...
+    // ... 
+
+    // Render the 'rosterchange' view and pass the description and staffName values to it
+    res.render('rosterchange', {description: description, staff: staffName});
+});
+
+ 
+app.post('/rosterupdate', async function(req, res) {
+  const newStaffName = req.body.newStaffName;
+  const description = req.body.description;
+
+  try {
+      // Find the document in the database using the description
+      let foundRoster = await Roster.findOne({ description: description });
+
+      // If the document is found, update the staff field
+      foundRoster.staff = newStaffName;
+      
+      // Save the updated document back to the database
+      let updatedRoster = await foundRoster.save();
+
+      console.log(updatedRoster);
+
+      // Redirect the user to '/rosterset'
+      res.redirect('/rosterset');
+
+  } catch (err) {
+      console.log(err);
+  }
+});
+
+
+
+  
+    
+  
+
+    
+
+  
+ 
+      
+    
+
+
+   
     
         
 app.get('/lift', (req, res) => {
