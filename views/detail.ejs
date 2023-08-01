@@ -7,7 +7,12 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
     <style>
 
-    .moved-text-box {
+      .card {
+             background-color: #2e3e50;
+                }
+
+
+    /* .moved-text-box {
       position: fixed;
       top: 50%;
       left: 50%;
@@ -20,7 +25,7 @@
       visibility: hidden;
       z-index: 9999;
       animation: fadeOut 1s ease-in-out;
-    }
+    } */
     
     @keyframes fadeOut {
       0% { opacity: 1; }
@@ -78,14 +83,18 @@
   <body class="bg-dark">
 
     <div class="container">
-     
-            <h3 class="text-center text-white"><%= itemName %></h3>
-            <table class="table table-primary table-hover table-bordered custom-table">
-<br>
-              <tr>
+      <h2 style="padding-left: 40px; color: white;"><%= itemName %></h2>
+    <br>
+    <div class="row mb-4">
+        <div class="col-12">
+    <div class="card mb-4" >
+        <div class="card-body">
+          <h5 class="card-title" style="color: white;">Move to:</h5>
+          <br>
+                 
+         
                  <form action="/detailmove" method="post">
-                <td class="fs-6">Move to:</td>
-                <td>
+              
                   <select name="theatre"class="form-select form-select-sm" style="width: 150px;" required>
                     <option selected disabled value="">Theatre</option>
                     <option value="A">Theatre A</option>
@@ -127,27 +136,43 @@
                     <option value="Store">Main Store</option>
                    
                   </select>
-                </td>
-                <td style="text-align: center;">
+                  <br>
+               
                   <input type="hidden" name="itemName" value="<%= itemName %>">
                   <button type="submit" class="btn btn-primary btn-sm">Submit</button>
-                </td>
+                <!-- </td> -->
                  </form>
-              
-              </tr>
-              </table>
+                </div>
+    </div>
+             
+          
             <br>
-            <br>
-              <table class="table table-primary table-hover table-bordered custom-table">
-              
-                <tr>
+            <div class="row mb-4">
+              <div class="col-12">
+          <div class="card mb-4" >
+              <div class="card-body">
+                <h5 class="card-title" style="color: white;">Make a booking:</h5>
+                <br>
+            
                   <form action="/detailbook" method="post">
-                  <td class="fs-6">Make a booking:</td>
-                  <td>
-                    <input type="datetime-local" name="bookingDateTime" style="width: 105px;" required>
+               
+                  <div class="row">
+                    <div class="col-6">
+                      <p class="card-text" style="color: white;">Date:</p>
+                    </div>
+                    <div class="col-6">
+                      <input type="datetime-local" name="bookingDateTime" style="width: 100%;" required>
+                    </div>
+                  </div>
+                    
                   <br>
+                  <div class="row">
+                    <div class="col-6">
+                      <p class="card-text" style="color: white;">Theatre:</p>
+                    </div>
+                    <div class="col-6">
                     <select name="theatreBook" style="width: 105px;" required>
-                    <option selected disabled value="">Theatre</option>
+                    <option selected disabled value="">Select</option>
                     <option value="A">A</option>
                     <option value="B">B</option>
                     <option value="C">C</option>
@@ -185,51 +210,46 @@
                     
                     </select>
                     <div id="error-message" class="text-danger"></div>
-                  </td>
-                  <td style="text-align: center;">
+                    <br>
+                
                       <input type="hidden" name="itemName" value="<%= itemName %>">
                       <button type="submit" class="btn btn-primary btn-sm">Submit</button>
-                  </td>
-                  </form>
-                    
                   
-                </tr>
-                </table>
-                <br>
+                  </form>
+                    </div>
+          </div>
+              </div>
+            </div>
+                  
+               
                 <br>
                 
-                <table class="table table-primary table-hover table-bordered custom-table">
-              </tr>
-
-              <tr>
-                <td class="fs-6">Info:</td>
-                <td colspan="2">
-                  <ul>
-                    <% info.forEach(item => { %>
-                      <li>Make: <%= item.make %></li>
-                      <li>Specs: <%= item.specs %></li>
-                      <li>Note: <%= item.note %></li>
-                      <br>
-                    <% }); %>
-                  </ul>
-                </td>
-              </tr>
-              
-
-              <!-- <tr>
-                <td class="fs-3">Info:</td>
-                <td colspan="2"><%= info %></td>
-            </tr> -->
-              
-            </table>
+                <div class="row mb-4">
+                  <div class="col-12">
+              <div class="card mb-4" >
+                  <div class="card-body">
+                    <h5 class="card-title" style="color: white;">Recent moves:</h5>
+                    <br>
+                    <% for(let move of moves) { %>
+                      <!-- display each move's theatre and time -->
+                      <div class="row" style="color: white;">
+                        <div class="col-sm-6">
+                          Theatre: <%= move.theatre %>
+                        </div>
+                        <div class="col-sm-6">
+                          Time: <%= new Date(move.date).toLocaleTimeString("en-US", { timeZone: "Africa/Johannesburg", hour12: false }) %>
+                        </div>
+                      </div>    
+                    <% } %>
+                    
+                    
+                  </div>
+                </div>
+              </div>
+            </div>
+                
             
-          
-    </div>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
+    
     
 
     

@@ -133,21 +133,54 @@ const connectDB = async () => {
 
 
 
-
-
 app.get('/detail', (req, res) => {
   const itemName = req.query.itemName;
-  
-  Equipment.findOne({ itemName }, 'itemName info')
-    .then(data => {
-      const { itemName, info } = data;
-      res.render('detail', { itemName, info });
+
+  // Get today's date at 00:00:00
+  const start = new Date();
+  start.setHours(0, 0, 0, 0);
+
+  // Get today's date at 23:59:59
+  const end = new Date();
+  end.setHours(23, 59, 59, 999);
+
+  const promises = [
+    Equipment.findOne({ itemName }, 'itemName info'),
+    Move.find({
+      itemName,
+      date: {
+        $gte: start,
+        $lt: end,
+      },
+    }),
+  ];
+
+  Promise.all(promises)
+    .then(([equipment, moves]) => {
+      const { itemName, info } = equipment;
+      res.render('detail', { itemName, info, moves });
     })
     .catch(error => {
       console.error(error);
       res.status(500).send('Internal Server Error');
     });
 });
+
+
+
+// app.get('/detail', (req, res) => {
+//   const itemName = req.query.itemName;
+  
+//   Equipment.findOne({ itemName }, 'itemName info')
+//     .then(data => {
+//       const { itemName, info } = data;
+//       res.render('detail', { itemName, info });
+//     })
+//     .catch(error => {
+//       console.error(error);
+//       res.status(500).send('Internal Server Error');
+//     });
+// });
 
 
 app.get('/logo', (req, res) => {
