@@ -8,10 +8,12 @@ require('dotenv').config();
 
 const app = express();
 const PORT = process.env.PORT || 3000
+
 app.set('view engine', 'ejs');
+
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({extended: true}));
-app.use(express.static('public'));
+
 
 
 const db_username = process.env.DB_USERNAME;
@@ -168,35 +170,30 @@ app.get('/detail', (req, res) => {
 
 
 
-// app.get('/detail', (req, res) => {
-//   const itemName = req.query.itemName;
-  
-//   Equipment.findOne({ itemName }, 'itemName info')
-//     .then(data => {
-//       const { itemName, info } = data;
-//       res.render('detail', { itemName, info });
-//     })
-//     .catch(error => {
-//       console.error(error);
-//       res.status(500).send('Internal Server Error');
-//     });
-// });
+app.get('/manifest.json', (req, res) => {
+  res.sendFile(`${__dirname}/manifest.json`);
+});
+
+app.get('/service-worker.js', (req, res) => {
+  res.sendFile(`${__dirname}/service-worker.js`);
+});
+
+
+
 
 
 app.get('/logo', (req, res) => {
   res.render('logo');
 });
 
-app.get('/logo2', (req, res) => {
-  res.render('logo2');
-});
+
 
 
 
 app.post("/detailmove", async function(req, res) {
   const itemName = req.body.itemName;
   const selectedTheatre = req.body.theatre;
-  console.log(selectedTheatre, itemName);
+  // console.log(selectedTheatre, itemName);
 
 
   Equipment.findOneAndUpdate(
@@ -204,7 +201,7 @@ app.post("/detailmove", async function(req, res) {
     { $set: { itemLocation: selectedTheatre } }, // Update the itemLocation field
     { new: true } // Return the updated document
     ).then(updatedEquipment => {
-      console.log(updatedEquipment);
+      // console.log(updatedEquipment);
     });
 
 
@@ -227,160 +224,76 @@ res.redirect("/logo");
 });
 
 
+app.post("/detailreturn", async function(req, res) {
+  const itemNamereturn = req.body.itemName;
+    
+  let selectedReturn; // Use let because the value might change
+
+  const validNamesC = [
+    "Ultrasound ET",
+    "V/L-scope ET",
+    "Transport Stack C",
+    "Level 1 rapid infuser A",
+    "ECG machine"
+];
+
+const validNamesU = [
+    "Ultrasound OET",
+    "V/L-scope OET",
+    "Transport Stack OET"
+];
+
+const validNamesG = [
+    "Ultrasound STORE",
+    "V/L-scope STORE",
+    "Transport Stack STORE"
+];
+
+const validNamesC2A = [
+    "V/L-scope C2A"
+];
+
+if (validNamesC.includes(itemNamereturn)) {
+    selectedReturn = 'C';
+} else if (validNamesU.includes(itemNamereturn)) {
+    selectedReturn = 'U';
+} else if (validNamesG.includes(itemNamereturn)) {
+    selectedReturn = 'G';
+} else if (validNamesC2A.includes(itemNamereturn)) {
+    selectedReturn = 'C2A';
+} else {
+    selectedReturn = 'Store'; // Default value
+}
 
 
+  // console.log(selectedReturn); // This will print the value to the console
+
+  Equipment.findOneAndUpdate(
+    { itemName: itemNamereturn }, // Find the document with the specified itemName
+    { $set: { itemLocation: selectedReturn } }, // Update the itemLocation field
+    { new: true } // Return the updated document
+    ).then(updatedEquipment => {
+      // console.log(updatedEquipment);
+    });
 
 
+      const move = new Move({
+      itemName: itemNamereturn,
+      theatre: selectedReturn,
+      date: new Date()
+});
 
-
-app.post('/detailbook', async function(req, res) {
-  const itemName = req.body.itemName;
-  const selectedTheatreBook = req.body.theatreBook;
-  const bookingDateTime = req.body.bookingDateTime;
-
-
-  console.log(itemName, bookingDateTime, selectedTheatreBook);
+// Save the Move document
+await move.save();
 
   
 
-  try {
-    const newBooking = await Booking.create({
-      itemName: itemName,
-      theatre: selectedTheatreBook,
-      date: bookingDateTime
 
-      
-    });
+res.redirect("/logo");
 
-    console.log('New booking created:', newBooking);
-    // Handle success case
-
-    
-    res.redirect('/logo2');
-
-  } catch (err) {
-    console.log('Error creating booking:', err);
-    // Handle error case
-  }
-});
-
-
-
-
-
-
-app.get('/link1', async (req, res) => {
-  try {
-    const documents = await Booking.find()
-      .select("itemName theatre date");
-
-    documents.forEach(function(doc) {
-      console.log("itemName:", doc.itemName);
-      console.log("theatre:", doc.theatre);
-      console.log("date:", doc.date);
-    });
-
-    res.render('link1', { documents }); // Pass documents as data to the template
-  } catch (err) {
-    console.log("Error retrieving documents:", err);
-    // Handle the error
-  }
-});
-
-
-
-
-
-
-
-
-app.post('/delete', async function(req, res) {
-  const itemName = req.body.itemName;
-
-  try {
-      // Delete the booking based on the itemName
-      const deletedBooking = await Booking.findOneAndDelete({ itemName: itemName });
-      console.log('Booking deleted:', deletedBooking);
-      // Handle success case
-  } catch (err) {
-      console.log('Error deleting booking:', err);
-      // Handle error case
-  }
-
-  try {
-    const documents = await Booking.find();
-    res.render('link1', { documents });
-} catch (err) {
-    console.log('Error retrieving documents:', err);
-    // Handle the error
-}
 
 });
 
-    
-    
-app.get('/link2', async (req, res) => {
-  try {
-    const previousDocuments = await Note.find().select('text'); // Retrieve the 'text' field from the Note collection
-
-    res.render('link2', { documents: previousDocuments }); // Pass documents as data to the template
-  } catch (err) {
-    console.log("Error retrieving documents:", err);
-    // Handle the error
-  }
-});
-
-
-
-    // get the new posts from my link2 page
-   
-    app.post('/link2', async (req, res) => {
-      const textParagraph = req.body.textParagraph;
-    
-      console.log(textParagraph);
-    
-      try {
-        const note = new Note({
-          text: textParagraph,
-          date: new Date()
-        });
-    
-        await note.save();
-
-        console.log('Note saved:', note);
-    res.redirect('/link2'); 
-  } catch (error) {
-    console.error('Error saving note:', error);
-    res.status(500).send('Error saving note');
-  }
-    });
-
-
-
-//Delete my notifications or Posts from link2 page
-
-    app.post('/deletePost', async function(req, res) {
-      const itemPost = req.body.text;
-    
-      try {
-          // Delete the booking based on the itemName
-          const deletedPost = await Note.findOneAndDelete({ text: itemPost });
-          console.log('Booking deleted:', deletedPost);
-          // Handle success case
-      } catch (err) {
-          console.log('Error deleting booking:', err);
-          // Handle error case
-      }
-    
-      try {
-        const documents = await Note.find();
-        res.render('link2', { documents });
-    } catch (err) {
-        console.log('Error retrieving documents:', err);
-        // Handle the error
-    }
-    
-    });
 
 
    
@@ -394,12 +307,7 @@ app.get('/link2', async (req, res) => {
     const description = req.body.description;
     const staffName = req.body.staff;
 
-    console.log(description);
-    console.log(staffName);
-
-    // Use description and staffName in your handler...
-    // ... 
-
+   
     // Render the 'rosterchange' view and pass the description and staffName values to it
     res.render('rosterchange', {description: description, staff: staffName});
 });
@@ -439,23 +347,9 @@ app.post('/rosterupdate', async function(req, res) {
 
   
  
-      
-    
+  
 
 
-   
-    
-        
-app.get('/lift', (req, res) => {
-  res.render('lift');
-});
-
-    
-
-
-// const record = Equipment.findOne();
-// const localNow = new Date(record.date.getTime() - (record.offset * 60000));
-// console.log(localNow);
 
 connectDB().then(() => {
   app.listen(PORT, () => {
@@ -465,16 +359,6 @@ connectDB().then(() => {
 
 
 
-
-// const port = process.env.PORT || 3000;
-
-// app.listen(port, function(){
-//   console.log("Server started on port " + port);
-// });
-
-
-  // app.listen(3000, function(){
-  //   console.log("Server started on port 3000")
 
 
 

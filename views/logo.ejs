@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#008B8B">
+
     <title>Logo</title>
 
     <script>
@@ -16,7 +19,42 @@
   <body>
     <h1> Moving ... </h1>  
   
-    <img src="/NXRX.gif" alt="Moving ...">
+    <img id="randomImage" src="/NXRX.gif" alt="Moving ...">
+
+    <script>
+        // Step 1: Prepare an array of your image filenames
+        const images = [
+            "/NXRX.gif",
+            "/cat.gif",
+            "/MrF.gif",
+            "/penguin.gif"
+        ];
+
+        // Step 2: Randomly select an index from that array
+        const randomIndex = Math.floor(Math.random() * images.length);
+
+        // Step 3: Use that index to select a filename
+        const selectedImage = images[randomIndex];
+
+        // Step 4: Update the src attribute of your image element with the selected filename
+        document.getElementById("randomImage").src = selectedImage;
+    </script>
+
+
+
+    <script>
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/service-worker.js')
+        .then(function(registration) {
+          console.log('Service Worker registered with scope:', registration.scope);
+        })
+        .catch(function(error) {
+          console.error('Service Worker registration failed:', error);
+        });
+      }
+      </script>
+    
+
   </body>
-</body>
+
 </html>
