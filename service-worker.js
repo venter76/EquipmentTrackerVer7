@@ -8,6 +8,7 @@ const STATIC_ASSETS = [
     '/NXRX.gif',
     '/penguin.gif',
     '/cat.gif',
+    '/offline.ejs',
    
     // ... other static assets
 ];
@@ -27,12 +28,17 @@ self.addEventListener('activate', (event) => {
     console.log('Service Worker activated!');
 });
 
+
 self.addEventListener('fetch', (event) => {
     const dynamicPaths = ['/', '/detail', '/rosterset', '/rosterchange'];
 
     if (dynamicPaths.some(path => event.request.url.includes(path))) {
         // Use Network Only strategy for dynamic content
-        event.respondWith(fetch(event.request));
+        event.respondWith(
+            fetch(event.request).catch(() => {
+                return caches.match('/offline.ejs');  // Show the offline page when fetch fails
+            })
+        );
     } else {
         // Use Cache First strategy for static assets
         event.respondWith(
@@ -42,11 +48,35 @@ self.addEventListener('fetch', (event) => {
                         cache.put(event.request, fetchResponse.clone());
                         return fetchResponse;
                     });
+                }).catch(() => {
+                    return caches.match('/offline.ejs');  // Also, show the offline page when fetch for other resources fails
                 });
             })
         );
     }
 });
+
+
+// self.addEventListener('fetch', (event) => {
+//     const dynamicPaths = ['/', '/detail', '/rosterset', '/rosterchange'];
+
+//     if (dynamicPaths.some(path => event.request.url.includes(path))) {
+//         // Use Network Only strategy for dynamic content
+//         event.respondWith(fetch(event.request));
+//     } else {
+//         // Use Cache First strategy for static assets
+//         event.respondWith(
+//             caches.match(event.request).then((response) => {
+//                 return response || fetch(event.request).then((fetchResponse) => {
+//                     return caches.open(CACHE_NAME).then((cache) => {
+//                         cache.put(event.request, fetchResponse.clone());
+//                         return fetchResponse;
+//                     });
+//                 });
+//             })
+//         );
+//     }
+// });
     
     
     
