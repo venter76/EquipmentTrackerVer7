@@ -1,4 +1,4 @@
-const CACHE_NAME = 'static-cache-v1';
+const CACHE_NAME = 'static-cache-v2';
 const STATIC_ASSETS = [
     '/iconLarge_1.png',
     '/iconLarge_2.png',
@@ -33,11 +33,10 @@ self.addEventListener('fetch', (event) => {
     const dynamicPaths = ['/', '/detail', '/rosterset', '/rosterchange'];
 
     if (dynamicPaths.some(path => event.request.url.includes(path))) {
-        // Use Network Only strategy for dynamic content
+        // Try fetching, and if it fails (e.g. because we're offline), return the offline page.
         event.respondWith(
-            fetch(event.request).catch(() => {
-                return caches.match('/offline.ejs');  // Show the offline page when fetch fails
-            })
+            fetch(event.request)
+            .catch(() => caches.match('/offline.ejs'))
         );
     } else {
         // Use Cache First strategy for static assets
@@ -49,12 +48,13 @@ self.addEventListener('fetch', (event) => {
                         return fetchResponse;
                     });
                 }).catch(() => {
-                    return caches.match('/offline.ejs');  // Also, show the offline page when fetch for other resources fails
+                    return caches.match('/offline.ejs');
                 });
             })
         );
     }
 });
+
 
 
 // self.addEventListener('fetch', (event) => {
