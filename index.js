@@ -43,16 +43,8 @@ const connectDB = async () => {
   const equipmentSchema = new mongoose.Schema({
     itemName: String,
     itemLocation: String,
-    status: Number,
-    info: [{
-      make: String,
-      specs: String,
-      note: String
-    }],
-    booked: String,
-    theatre: String,
-    date: Date,
     colour: String,
+    number: Number,
     });
   
   
@@ -119,13 +111,17 @@ const connectDB = async () => {
 
   app.get("/", function(req, res){
 
-    Equipment.find({}, 'itemName itemLocation colour')
+   
+
+    Equipment.find({}, 'itemName itemLocation colour number')
+    .sort({ number: 1 })  // Sort by 'number' in ascending order
     .then(data => {
+     
       const itemNames = data.map(item => item.itemName);
       const itemLocations = data.map(item => item.itemLocation);
       const itemColours = data.map(item => item.colour);
-
-      res.render('index', { itemNames, itemLocations, itemColours});
+      const itemNumbers = data.map(item => item.number);
+      res.render('index', { itemNames, itemLocations, itemColours, itemNumbers});
     })
     .catch(err => {
       console.error(err);
