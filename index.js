@@ -225,7 +225,9 @@ res.redirect("/logo");
 
 
 app.post("/detailreturn", async function(req, res) {
-  const itemNamereturn = req.body.itemName;
+  const itemNamereturn = req.body.itemName.trim();
+
+  // console.log(`itemNamereturn: ${itemNamereturn}`);
     
   let selectedReturn; // Use let because the value might change
 
@@ -243,10 +245,10 @@ const validNamesU = [
     "Transport Stack U"
 ];
 
-const validNamesG = [
-    "Ultrasound G",
-    "V/L-scope G",
-    "Transport Stack G"
+const validNamesH = [
+    "Ultrasound H",
+    "V/L-scope H",
+    "Transport Stack H"
 ];
 
 const validNamesC2A = [
@@ -257,8 +259,8 @@ if (validNamesC.includes(itemNamereturn)) {
     selectedReturn = 'C';
 } else if (validNamesU.includes(itemNamereturn)) {
     selectedReturn = 'U';
-} else if (validNamesG.includes(itemNamereturn)) {
-    selectedReturn = 'G';
+} else if (validNamesH.includes(itemNamereturn)) {
+    selectedReturn = 'H';
 } else if (validNamesC2A.includes(itemNamereturn)) {
     selectedReturn = 'C2A';
 } else {
