@@ -102,9 +102,13 @@ const connectDB = async () => {
 
 
 
+  app.get('/checkOnline', (req, res) => {
+    console.log('Entered checkOnline route');
+    res.status(200).send('Online');
+});
 
 
-
+ 
 
   
   
