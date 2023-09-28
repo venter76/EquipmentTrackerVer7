@@ -30,123 +30,135 @@
     "number": 5
   },
   {
+    "itemName": "Ultrasound Paeds",
+    "itemLocation": "Store",
+    "colour": "success-subtle",
+    "number": 6
+  },
+  {
     "itemName": "V/L-scope ET",
     "itemLocation": "C",
     "colour": "info-subtle",
-    "number": 6
+    "number": 7
   },
   {
     "itemName": "V/L-scope OET",
     "itemLocation": "U",
     "colour": "info-subtle",
-    "number": 7
+    "number": 8
   },
   {
     "itemName": "V/L-scope STORE",
     "itemLocation": "U",
     "colour": "info-subtle",
-    "number": 8
+    "number": 9
   },
   {
     "itemName": "V/L-scope C2A",
     "itemLocation": "U",
     "colour": "info-subtle",
-    "number": 9
+    "number": 10
   },
   {
     "itemName": "Transport Stack C",
     "itemLocation": "C",
     "colour": "warning-subtle",
-    "number": 10
+    "number": 11
   },
   {
     "itemName": "Transport Stack D",
     "itemLocation": "D",
     "colour": "warning-subtle",
-    "number": 11
+    "number": 12
   },
   {
     "itemName": "Transport Stack STORE",
     "itemLocation": "C",
     "colour": "warning-subtle",
-    "number": 12
+    "number": 13
   },
   {
     "itemName": "Transport Stack OET",
     "itemLocation": "C",
     "colour": "warning-subtle",
-    "number": 13
+    "number": 14
   },
   {
     "itemName": "Level 1 rapid infuser A",
     "itemLocation": "A",
     "colour": "danger-subtle",
-    "number": 14
+    "number": 15
   },
   {
     "itemName": "Level 1 rapid infuser B",
     "itemLocation": "A",
     "colour": "danger-subtle",
-    "number": 15
+    "number": 16
   },
   {
     "itemName": "Cell saver 1",
     "itemLocation": "Store",
     "colour": "primary-subtle",
-    "number": 16
+    "number": 17
   },
   {
     "itemName": "Cell saver 2",
     "itemLocation": "Store",
     "colour": "primary-subtle",
-    "number": 17
+    "number": 18
   },
   {
     "itemName": "Difficult Airway trolley",
     "itemLocation": "U",
     "colour": "success-subtle",
-    "number": 18
+    "number": 19
   },
   {
     "itemName": "Bronchoscope 5.0mm",
     "itemLocation": "U",
     "colour": "dark-subtle",
-    "number": 19
+    "number": 20
   },
   {
     "itemName": "Bronchoscope 3.7mm",
     "itemLocation": "U",
     "colour": "dark-subtle",
-    "number": 20
+    "number": 22
   },
   {
     "itemName": "Bronchoscope 5.1mm",
     "itemLocation": "U",
     "colour": "dark-subtle",
-    "number": 21
+    "number": 22
   },
   {
     "itemName": "Bronchoscope 3.5mm",
     "itemLocation": "U",
     "colour": "dark-subtle",
-    "number": 22
+    "number": 23
   },
   {
     "itemName": "Bronchoscope 2.1mm",
     "itemLocation": "U",
     "colour": "dark-subtle",
-    "number": 23
+    "number": 24
   },
   {
     "itemName": "Stack with camera",
     "itemLocation": "U",
     "colour": "dark-subtle",
-    "number": 24
+    "number": 25
   },
   {
-    "itemName": "ECG machine",
+    "itemName": "ECG machine1",
     "itemLocation": "U",
     "colour": "success-subtle",
-    "number": 25
+    "number": 26
+  },
+  {
+    "itemName": "ECG machine2",
+    "itemLocation": "Store",
+    "colour": "success-subtle",
+    "number": 27
   }
 ]

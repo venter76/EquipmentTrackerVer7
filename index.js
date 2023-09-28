@@ -230,23 +230,23 @@ app.post("/detailreturn", async function(req, res) {
   let selectedReturn; // Use let because the value might change
 
   const validNamesC = [
-    "Ultrasound ET",
-    "V/L-scope ET",
+    "Ultrasound C",
+    "V/L-scope C",
     "Transport Stack C",
     "Level 1 rapid infuser A",
-    "ECG machine"
+    "ECG machine1"
 ];
 
 const validNamesU = [
-    "Ultrasound OET",
-    "V/L-scope OET",
-    "Transport Stack OET"
+    "Ultrasound U",
+    "V/L-scope U",
+    "Transport Stack U"
 ];
 
 const validNamesG = [
-    "Ultrasound STORE",
-    "V/L-scope STORE",
-    "Transport Stack STORE"
+    "Ultrasound G",
+    "V/L-scope G",
+    "Transport Stack G"
 ];
 
 const validNamesC2A = [
