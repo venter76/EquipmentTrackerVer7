@@ -1,31 +1,31 @@
 [
   {
     "itemName": "Ultrasound C",
-    "itemLocation": "Faulty",
+    "itemLocation": "C",
     "colour": "success-subtle",
     "number": 1
   },
   {
-    "itemName": "Ultraound U",
-    "itemLocation": "H",
+    "itemName": "Ultrasound U",
+    "itemLocation": "U",
     "colour": "success-subtle",
     "number": 2
   },
   {
-    "itemName": "Ultrsaound G",
-    "itemLocation": "Faulty",
+    "itemName": "Ultrasound H",
+    "itemLocation": "H",
     "colour": "success-subtle",
     "number": 3
   },
   {
     "itemName": "Ultrasound GE",
-    "itemLocation": "Store",
+    "itemLocation": "Faulty",
     "colour": "success-subtle",
     "number": 4
   },
   {
     "itemName": "Ultrasound Philips",
-    "itemLocation": "A",
+    "itemLocation": "F",
     "colour": "success-subtle",
     "number": 5
   },
@@ -37,25 +37,25 @@
   },
   {
     "itemName": "V/L-scope C",
-    "itemLocation": "C",
+    "itemLocation": "G",
     "colour": "info-subtle",
     "number": 7
   },
   {
     "itemName": "V/L-scope U",
-    "itemLocation": "U",
+    "itemLocation": "W",
     "colour": "info-subtle",
     "number": 8
   },
   {
-    "itemName": "V/L-scope G",
-    "itemLocation": "U",
+    "itemName": "V/L-scope H",
+    "itemLocation": "Faulty",
     "colour": "info-subtle",
     "number": 9
   },
   {
     "itemName": "V/L-scope C2A",
-    "itemLocation": "U",
+    "itemLocation": "C2A",
     "colour": "info-subtle",
     "number": 10
   },
@@ -72,14 +72,14 @@
     "number": 12
   },
   {
-    "itemName": "Transport Stack G",
-    "itemLocation": "C",
+    "itemName": "Transport Stack H",
+    "itemLocation": "H",
     "colour": "warning-subtle",
     "number": 13
   },
   {
     "itemName": "Transport Stack U",
-    "itemLocation": "C",
+    "itemLocation": "U",
     "colour": "warning-subtle",
     "number": 14
   },
@@ -91,7 +91,7 @@
   },
   {
     "itemName": "Level 1 rapid infuser B",
-    "itemLocation": "A",
+    "itemLocation": "Store",
     "colour": "danger-subtle",
     "number": 16
   },
@@ -109,56 +109,74 @@
   },
   {
     "itemName": "Difficult Airway trolley",
-    "itemLocation": "U",
+    "itemLocation": "Store",
     "colour": "success-subtle",
     "number": 19
+  },
+  {
+    "itemName": "INVOS C",
+    "itemLocation": "Store",
+    "colour": "danger-subtle",
+    "number": 20
+  },
+  {
+    "itemName": "INVOS U",
+    "itemLocation": "U",
+    "colour": "danger-subtle",
+    "number": 21
+  },
+  {
+    "itemName": "INVOS Store",
+    "itemLocation": "Store",
+    "colour": "danger-subtle",
+    "number": 22
   },
   {
     "itemName": "Bronchoscope 5.0mm",
     "itemLocation": "U",
     "colour": "dark-subtle",
-    "number": 20
+    "number": 23
   },
   {
     "itemName": "Bronchoscope 3.7mm",
     "itemLocation": "U",
     "colour": "dark-subtle",
-    "number": 22
+    "number": 24
   },
   {
     "itemName": "Bronchoscope 5.1mm",
     "itemLocation": "U",
     "colour": "dark-subtle",
-    "number": 22
+    "number": 25
   },
   {
     "itemName": "Bronchoscope 3.5mm",
     "itemLocation": "U",
     "colour": "dark-subtle",
-    "number": 23
+    "number": 26
   },
   {
     "itemName": "Bronchoscope 2.1mm",
     "itemLocation": "U",
     "colour": "dark-subtle",
-    "number": 24
+    "number": 27
   },
   {
     "itemName": "Stack with camera",
     "itemLocation": "U",
     "colour": "dark-subtle",
-    "number": 25
+    "number": 28
   },
   {
     "itemName": "ECG machine1",
     "itemLocation": "U",
     "colour": "success-subtle",
-    "number": 26
+    "number": 29
   },
   {
     "itemName": "ECG machine2",
-    "itemLocation": "Store",
+    "itemLocation": "PACU",
     "colour": "success-subtle",
-    "number": 27
+    "number": 30
   }
 ]

@@ -236,13 +236,15 @@ app.post("/detailreturn", async function(req, res) {
     "V/L-scope C",
     "Transport Stack C",
     "Level 1 rapid infuser A",
-    "ECG machine1"
+    "ECG machine1",
+    "INVOS C"
 ];
 
 const validNamesU = [
     "Ultrasound U",
     "V/L-scope U",
-    "Transport Stack U"
+    "Transport Stack U",
+    "INVOS U"
 ];
 
 const validNamesH = [
