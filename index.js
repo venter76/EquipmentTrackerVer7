@@ -138,9 +138,11 @@ const connectDB = async () => {
 app.get('/detail', (req, res) => {
   const itemName = req.query.itemName;
 
-  // Get today's date at 00:00:00
-  const start = new Date();
-  start.setHours(0, 0, 0, 0);
+  // Get yesterday's date at 12:00:00 (noon)
+const start = new Date();
+start.setDate(start.getDate() - 1); // This sets the date to yesterday
+start.setHours(12, 0, 0, 0); // This sets the time to noon
+
 
   // Get today's date at 23:59:59
   const end = new Date();

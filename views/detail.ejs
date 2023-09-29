@@ -152,20 +152,23 @@
                   <div class="col-12">
               <div class="card mb-4" >
                   <div class="card-body">
-                    <h5 class="card-title" style="color: white;">Today's moves:</h5>
+                    <h5 class="card-title" style="color: white;">Recent moves:</h5>
                     <br>
                     <% for(let move of moves) { %>
-                      <!-- display each move's theatre and time -->
+                      <!-- display each move's theatre, date, and time -->
                       <div class="row" style="color: white;">
-                        <div class="col-6">
-                          Theatre: <%= move.theatre %>
-                        </div>
-                        <div class="col-6">
-                          Time: <%= new Date(move.date).toLocaleTimeString("en-US", { timeZone: "Africa/Johannesburg", hour12: false }) %>
-                        </div>
+                          <div class="col-4">
+                              Theatre: <%= move.theatre %>
+                          </div>
+                          <div class="col-4">
+                              Date: <%= new Date(move.date).toLocaleDateString("en-US", { timeZone: "Africa/Johannesburg", day: '2-digit', month: 'short' }) %> 
+                          </div>
+                          <div class="col-4">
+                              Time: <%= new Date(move.date).toLocaleTimeString("en-US", { timeZone: "Africa/Johannesburg", hour: '2-digit', minute: '2-digit', hour12: false }) %>
+                          </div>
                       </div>    
-                    <% } %>
-                    
+                  <% } %>
+                  
                     
                   </div>
                 </div>
