@@ -140,7 +140,7 @@ app.get('/detail', (req, res) => {
 
   // Get yesterday's date at 12:00:00 (noon)
 const start = new Date();
-start.setDate(start.getDate() - 2); // This sets the date to yesterday
+start.setDate(start.getDate() - 3); // This sets the date to yesterday
 start.setHours(12, 0, 0, 0); // This sets the time to noon
 
 
