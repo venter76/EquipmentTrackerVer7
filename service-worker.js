@@ -1,4 +1,4 @@
-const CACHE_NAME = 'static-cache-v11';
+const CACHE_NAME = 'static-cache-v12';
 const STATIC_ASSETS = [
     'placeholder.html',
     '/iconLarge_1.png',
