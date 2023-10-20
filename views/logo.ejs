@@ -8,6 +8,17 @@
 
     <title>Logo</title>
 
+    <style>
+      /* Style for the image */
+      #randomImage {
+          max-width: 100%;
+          height: auto;
+          display: block;
+          margin: 0 auto;
+      }
+  </style>
+  
+
     <script>
         setTimeout(function() {
             window.location.href = "/";
@@ -18,8 +29,13 @@
   
   <body>
     <h1> Moving ... </h1>  
+
+    <div id="imageContainer" style="text-align: center; border: 2px solid #008B8B; padding: 10px;">
+      <img id="randomImage" src="/NXRX.gif" alt="Moving ...">
+  </div>
   
-    <img id="randomImage" src="/NXRX.gif" alt="Moving ...">
+  
+    
 
     <script>
         // Step 1: Prepare an array of your image filenames
