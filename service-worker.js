@@ -1,4 +1,4 @@
-const CACHE_NAME = 'static-cache-v14';
+const CACHE_NAME = 'static-cache-v15';
 const STATIC_ASSETS = [
     'placeholder.html',
     '/iconLarge_1.png',
@@ -10,6 +10,7 @@ const STATIC_ASSETS = [
     '/penguin.gif',
     '/cat.gif',
     '/beatles.gif',
+    '/eben.jpg',
     'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css',
    
     // ... other static assets
