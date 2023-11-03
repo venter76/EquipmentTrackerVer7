@@ -242,6 +242,10 @@ app.post("/detailreturn", async function(req, res) {
     "INVOS C"
 ];
 
+const validNamesD = [
+  "Transport Stack D"
+]
+
 const validNamesU = [
     "Ultrasound U",
     "V/L-scope U",
@@ -261,6 +265,8 @@ const validNamesC2A = [
 
 if (validNamesC.includes(itemNamereturn)) {
     selectedReturn = 'C';
+} else if (validNamesD.includes(itemNamereturn)) {
+    selectedReturn = 'D';
 } else if (validNamesU.includes(itemNamereturn)) {
     selectedReturn = 'U';
 } else if (validNamesH.includes(itemNamereturn)) {
