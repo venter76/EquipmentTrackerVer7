@@ -62,7 +62,6 @@
 
 <link rel="manifest" href="manifest.json" />   
 <meta name="theme-color" content="#008B8B">
-<script src="/socket.io/socket.io.js"></script>
 </head>
   
 <header>
@@ -213,15 +212,7 @@
               }
           }
       </script>
-     <script>
-      const socket = io();
-    
-      socket.on('connect', () => {
-        console.log('Connected to server');
-      });
-    
-      // Listen for other events and update the DOM accordingly
-    </script>
+     
 
 </body>
 
