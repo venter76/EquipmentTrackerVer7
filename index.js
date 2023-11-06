@@ -3,10 +3,14 @@ const bodyParser = require('body-parser');
 const mongoose = require("mongoose");
 const moment = require('moment');
 require('dotenv').config();
+const http = require('http');
+const socketIo = require('socket.io');
 
   
 
 const app = express();
+const server = http.createServer(app);
+const io = socketIo(server); 
 const PORT = process.env.PORT || 3000
 
 app.set('view engine', 'ejs');
@@ -108,7 +112,15 @@ const connectDB = async () => {
 });
 
 
- 
+ // Now setup a basic connection event with Socket.IO
+io.on('connection', (socket) => {
+  console.log('New client connected');
+
+  // You can setup more events here
+  socket.on('disconnect', () => {
+    console.log('Client disconnected');
+  });
+});
 
   
   
@@ -195,35 +207,45 @@ app.get('/logo', (req, res) => {
 app.post("/detailmove", async function(req, res) {
   const itemName = req.body.itemName;
   const selectedTheatre = req.body.theatre;
-  // console.log(selectedTheatre, itemName);
 
+  try {
+    // Find the document with the specified itemName and update it
+    const updatedEquipment = await Equipment.findOneAndUpdate(
+      { itemName: itemName },
+      { $set: { itemLocation: selectedTheatre } },
+      { new: true } // Return the updated document
+    );
 
-  Equipment.findOneAndUpdate(
-    { itemName: itemName }, // Find the document with the specified itemName
-    { $set: { itemLocation: selectedTheatre } }, // Update the itemLocation field
-    { new: true } // Return the updated document
-    ).then(updatedEquipment => {
-      // console.log(updatedEquipment);
-    });
-
-
+    if (updatedEquipment) {
       const move = new Move({
-      itemName: itemName,
-      theatre: selectedTheatre,
-      date: new Date()
+        itemName: itemName,
+        theatre: selectedTheatre,
+        date: new Date()
+      });
+
+      // Save the Move document
+      await move.save();
+
+      // Emit the equipment move update to all connected clients
+      io.emit('equipmentMove', {
+        itemName: itemName,
+        newLocation: selectedTheatre,
+        time: move.date
+      });
+
+      // Redirect to the homepage or confirmation page after successful update
+      res.redirect("/logo");
+    } else {
+      // If the equipment wasn't found or the update failed
+      res.status(404).send("Equipment not found or update failed");
+    }
+  } catch (error) {
+    // Handle any errors that occur during the process
+    console.error(error);
+    res.status(500).send("Internal Server Error");
+  }
 });
 
-// Save the Move document
-await move.save();
-
-  
-
-
-res.redirect("/logo");
-
-
-
-});
 
 
 app.post("/detailreturn", async function(req, res) {
@@ -364,9 +386,9 @@ app.post('/rosterupdate', async function(req, res) {
 
 
 connectDB().then(() => {
-  app.listen(PORT, () => {
-      console.log("listening for requests");
-  })
+  server.listen(3000, () => {
+    console.log('Listening on port 3000');
+  });
 })
 
 
