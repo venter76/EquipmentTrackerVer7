@@ -31,7 +31,11 @@
     <h1> Moving ... </h1>  
 
     <div id="imageContainer" style="text-align: center; border: 2px solid #008B8B; padding: 10px;">
-      <img id="randomImage" src="/NXRX.gif" alt="Moving ...">
+      <% if (tokenAwarded) { %>
+        <img src="/token.gif" alt="Token Awarded">
+      <% } else { %>
+        <img id="randomImage" src="/NXRX.gif" alt="Moving ...">
+      <% } %>
   </div>
   
   

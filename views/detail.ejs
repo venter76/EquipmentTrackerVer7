@@ -26,6 +26,11 @@
     background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255, 255, 255, 1)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
   }
 
+  .very-small-text {
+    font-size: 10px; /* Or any other size */
+}
+
+
     </style>
 <link rel="manifest" href="manifest.json" />  
 
@@ -154,21 +159,30 @@
                   <div class="card-body">
                     <h5 class="card-title" style="color: white;">Recent moves:</h5>
                     <br>
+                    <div class="row very-small-text" style="color: white;">
                     <% for(let move of moves) { %>
-                      <!-- display each move's theatre, date, and time -->
+                      <!-- display each move's theatre, date, time, and user -->
                       <div class="row" style="color: white;">
-                          <div class="col-4">
+                          <div class="col-3">
+                            <% if (move.base === 'returned') { %>
+                              Theatre: Returned
+                          <% } else { %>
                               Theatre: <%= move.theatre %>
+                          <% } %>
                           </div>
-                          <div class="col-4">
+                          <div class="col-3">
                               Date: <%= new Date(move.date).toLocaleDateString("en-US", { timeZone: "Africa/Johannesburg", day: '2-digit', month: 'short' }) %> 
                           </div>
-                          <div class="col-4">
+                          <div class="col-3">
                               Time: <%= new Date(move.date).toLocaleTimeString("en-US", { timeZone: "Africa/Johannesburg", hour: '2-digit', minute: '2-digit', hour12: false }) %>
                           </div>
-                      </div>    
-                  <% } %>
-                  
+                          <div class="col-3">
+                              User: <%= move.userName %> <!-- Display the user's name -->
+                          </div>
+                      </div>   
+
+                    <% } %>
+                    </div>
                     
                   </div>
                 </div>

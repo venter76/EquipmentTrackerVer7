@@ -4,6 +4,72 @@ const mongoose = require("mongoose");
 const moment = require('moment');
 require('dotenv').config();
 
+const MongoStore = require('connect-mongo');
+const bcrypt = require('bcryptjs');
+const flash = require('connect-flash');
+
+
+
+
+const fixedHashedPassword = process.env.FIXED_HASHED_PASSWORD;
+
+function isItemReturned(itemName, selectedTheatre) {
+
+// Define the validNames arrays inside the function
+const validNamesC = [
+  "Ultrasound C",
+  "V/L-scope C",
+  "Transport Stack C",
+  "Level 1 rapid infuser A",
+  "ECG machine1",
+  "INVOS C"
+];
+
+const validNamesD = [
+  "Transport Stack D"
+];
+
+const validNamesU = [
+  "Ultrasound U",
+  "V/L-scope U",
+  "Transport Stack U",
+  "INVOS U"
+];
+
+const validNamesH = [
+  "Ultrasound H",
+  "V/L-scope H",
+  "Transport Stack H"
+];
+
+const validNamesC2A = [
+  "V/L-scope C2A"
+];
+
+
+  const storeLocations = {
+    'C': validNamesC,
+    'D': validNamesD,
+    'U': validNamesU,
+    'H': validNamesH,
+    'C2A': validNamesC2A
+  };
+
+  // Check if the selectedTheatre is a key in the storeLocations object
+  if (storeLocations[selectedTheatre]) {
+    return storeLocations[selectedTheatre].includes(itemName);
+  }
+
+// If the item isn't found in the above lists and the selectedTheatre is 'Store'
+if (selectedTheatre === 'Store') {
+  return true; // Item is considered returned if it's in the 'Store'
+}
+
+
+  return false;
+}
+
+
   
 
 const app = express();
@@ -13,7 +79,7 @@ app.set('view engine', 'ejs');
 
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({extended: true}));
-
+const session = require('express-session');
 
 
 const db_username = process.env.DB_USERNAME;
@@ -36,6 +102,53 @@ const connectDB = async () => {
   }
 };
 
+
+//Session cookie setup:
+
+
+app.set('trust proxy', 1);
+
+app.use(session({
+  secret: process.env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: false,
+  store: MongoStore.create({ 
+    mongoUrl: `mongodb+srv://${db_username}:${db_password}@${db_cluster_url}/${db_name}?retryWrites=true&w=majority`,
+    }),
+    cookie: { 
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax', // must be 'none' to enable cross-site delivery
+      httpOnly: true, // prevents JavaScript from making changes
+      maxAge: 1000 * 60 * 60 * 24 * 7 * 3 // 3 weeks
+    }
+  }));
+
+// After you've set up your sessions
+app.use(flash());
+
+// Make sure to pass the flash messages into your context for the view
+app.use((req, res, next) => {
+  res.locals.success_msg = req.flash('success_msg');
+  res.locals.error_msg = req.flash('error_msg');
+  next();
+});
+
+
+
+  
+const userSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: [true, 'Please provide your name']
+  },
+  surname: {
+    type: String,
+    required: [true, 'Please provide your surname']
+  }
+  // removed the password field
+});
+
+const User = mongoose.model('User', userSchema);
 
 
 
@@ -67,6 +180,8 @@ const connectDB = async () => {
   const moveSchema = new mongoose.Schema({
     itemName: String,
     theatre: String,
+    userName: String, // Add this field to store the user's name
+    base: String,
     date: {
       type: Date,
       default: Date.now
@@ -74,6 +189,7 @@ const connectDB = async () => {
   });
   
   const Move = mongoose.model('Move', moveSchema);
+  
 
 
 
@@ -101,6 +217,23 @@ const connectDB = async () => {
   const Roster = mongoose.model('Roster', rosterSchema);
 
 
+  const tokenSchema = new mongoose.Schema({
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      required: true
+    },
+    tokenNumber: {
+      type: Number,
+      default: 0
+    }
+  });
+  
+  const Token = mongoose.model('Token', tokenSchema);
+  
+  
+
+
 
   app.get('/checkOnline', (req, res) => {
     console.log('Entered checkOnline route');
@@ -108,15 +241,74 @@ const connectDB = async () => {
 });
 
 
- 
+app.get('/login', (req, res) => {
+  // Check if the user is already logged in
+  if (req.session.userId) {
+    // If logged in, redirect to the home page or dashboard
+    res.redirect('/');
+  } else {
+    // If not logged in, render the login page
+    // Pass the 'error' flash message if it exists
+    res.render('login', { error: req.flash('error') });
+  }
+});
 
-  
-  
 
-  app.get("/", function(req, res){
 
-   
 
+
+app.post('/login', async (req, res) => {
+  const { name, surname, password } = req.body;
+  const fixedPasswordHash = process.env.FIXED_PASSWORD_HASH;
+
+  console.log('Login attempt:', { name, surname });
+
+  try {
+    let user = await User.findOne({ name, surname });
+    console.log('User found:', user);
+
+    if (!user) {
+      console.log('No existing user found, creating new user');
+      const hashedPassword = await bcrypt.hash(password, 10);
+      user = new User({ name, surname, password: hashedPassword });
+      await user.save();
+      console.log('New user created:', user);
+    }
+
+    const isMatch = user.password 
+                    ? await bcrypt.compare(password, user.password)
+                    : await bcrypt.compare(password, fixedPasswordHash);
+    console.log('Password match:', isMatch);
+
+    if (isMatch) {
+      req.session.userId = user._id;
+      req.session.userName = user.name;
+      console.log('Session before save:', req.session);
+
+      req.session.save(err => {
+        if (err) {
+          console.error('Session save error:', err);
+          return res.status(500).send('An error occurred saving the session.');
+        }
+        console.log('Session saved successfully.');
+        return res.redirect('/');
+      });
+    } else {
+      console.log('Password does not match for user:', name);
+      req.flash('error', 'Incorrect password.');
+      res.redirect('/login');
+    }
+  } catch (error) {
+    console.error('Login error:', error);
+    res.status(500).send('An error occurred during the login process.');
+  }
+});
+
+
+app.get("/", function(req, res){
+  // Check if user is logged in by looking for session userId
+  if (req.session.userId) {
+    // User is logged in, fetch equipment data and render the index page
     Equipment.find({}, 'itemName itemLocation colour number')
     .sort({ number: 1 })  // Sort by 'number' in ascending order
     .then(data => {
@@ -125,24 +317,29 @@ const connectDB = async () => {
       const itemLocations = data.map(item => item.itemLocation);
       const itemColours = data.map(item => item.colour);
       const itemNumbers = data.map(item => item.number);
-      res.render('index', { itemNames, itemLocations, itemColours, itemNumbers});
+      // Render the index page with equipment data
+      res.render('index', { itemNames, itemLocations, itemColours, itemNumbers });
     })
     .catch(err => {
       console.error(err);
       res.status(500).send('Internal Server Error');
     });
+  } else {
+    // User is not logged in, render the login page
+    res.render('login', { message: req.flash('loginMessage') });
+  }
 });
+ 
 
-
-
+  
 app.get('/detail', (req, res) => {
   const itemName = req.query.itemName;
+  const userName = req.session.userName; // Retrieve the user's name from the session
 
   // Get yesterday's date at 12:00:00 (noon)
-const start = new Date();
-start.setDate(start.getDate() - 3); // This sets the date to yesterday
-start.setHours(12, 0, 0, 0); // This sets the time to noon
-
+  const start = new Date();
+  start.setDate(start.getDate() - 3); // This sets the date to yesterday
+  start.setHours(12, 0, 0, 0); // This sets the time to noon
 
   // Get today's date at 23:59:59
   const end = new Date();
@@ -162,7 +359,8 @@ start.setHours(12, 0, 0, 0); // This sets the time to noon
   Promise.all(promises)
     .then(([equipment, moves]) => {
       const { itemName, info } = equipment;
-      res.render('detail', { itemName, info, moves });
+      // Include userName in the object passed to res.render
+      res.render('detail', { itemName, info, moves, userName });
     })
     .catch(error => {
       console.error(error);
@@ -185,49 +383,72 @@ app.get('/service-worker.js', (req, res) => {
 
 
 app.get('/logo', (req, res) => {
-  res.render('logo');
+  const tokenAwarded = req.query.tokenAwarded === 'true';
+  res.render('logo', { tokenAwarded: tokenAwarded });
 });
-
-
-
 
 
 app.post("/detailmove", async function(req, res) {
   const itemName = req.body.itemName;
   const selectedTheatre = req.body.theatre;
-  // console.log(selectedTheatre, itemName);
+  const userName = req.session.userName; // Retrieve the user's name from the session
 
+  try {
+    await Equipment.findOneAndUpdate(
+      { itemName: itemName },
+      { $set: { itemLocation: selectedTheatre } },
+      { new: true }
+    );
 
-  Equipment.findOneAndUpdate(
-    { itemName: itemName }, // Find the document with the specified itemName
-    { $set: { itemLocation: selectedTheatre } }, // Update the itemLocation field
-    { new: true } // Return the updated document
-    ).then(updatedEquipment => {
-      // console.log(updatedEquipment);
-    });
-
-
-      const move = new Move({
+    const base = isItemReturned(itemName, selectedTheatre) ? 'returned' : 'not returned';
+    const move = new Move({
       itemName: itemName,
       theatre: selectedTheatre,
+      userName: userName,
+      base: base,
       date: new Date()
+    });
+
+    await move.save();
+
+    let tokenAwarded = false;
+
+    // Count the total number of moves
+    const totalMoves = await Move.countDocuments();
+    if ((totalMoves % 10) === 0) {
+      let userToken = await Token.findOne({ userId: req.session.userId });
+
+      if (userToken) {
+        userToken.tokenNumber += 1;
+        await userToken.save();
+      } else {
+        userToken = new Token({
+          userId: req.session.userId,
+          tokenNumber: 1
+        });
+        await userToken.save();
+      }
+
+      tokenAwarded = true;
+      console.log("Token awarded in /detailmove:", tokenAwarded);
+      console.log(`Prize token awarded to ${userName}. Total tokens: ${userToken.tokenNumber}`);
+    }
+
+// Redirect with the tokenAwarded flag
+res.redirect(`/logo?tokenAwarded=${tokenAwarded}`);
+
+  } catch (error) {
+    console.error('Error in /detailmove:', error);
+    res.status(500).send('An error occurred');
+  }
 });
 
-// Save the Move document
-await move.save();
 
-  
-
-
-res.redirect("/logo");
-
-
-
-});
 
 
 app.post("/detailreturn", async function(req, res) {
   const itemNamereturn = req.body.itemName.trim();
+  const userName = req.session.userName;
 
   // console.log(`itemNamereturn: ${itemNamereturn}`);
     
@@ -288,24 +509,67 @@ if (validNamesC.includes(itemNamereturn)) {
       // console.log(updatedEquipment);
     });
 
+    const base = 'returned'; // Assigning the value to a variable
+
 
       const move = new Move({
       itemName: itemNamereturn,
       theatre: selectedReturn,
+      userName: userName,
+      base: base, // Indicating that the item has been returned to its base 
       date: new Date()
 });
 
+console.log(`Item returned status in theatre:`, base);
 // Save the Move document
 await move.save();
 
-  
+let tokenAwarded = false;
 
+    // Count the total number of moves
+    const totalMoves = await Move.countDocuments();
+    if ((totalMoves % 8) === 0) {
+      let userToken = await Token.findOne({ userId: req.session.userId });
 
-res.redirect("/logo");
+      if (userToken) {
+        userToken.tokenNumber += 1;
+        await userToken.save();
+      } else {
+        userToken = new Token({
+          userId: req.session.userId,
+          tokenNumber: 1
+        });
+        await userToken.save();
+      }
+
+      tokenAwarded = true;
+      console.log("Token awarded in /detailmove:", tokenAwarded);
+      console.log(`Prize token awarded to ${userName}. Total tokens: ${userToken.tokenNumber}`);
+    }
+
+// Redirect with the tokenAwarded flag
+res.redirect(`/logo?tokenAwarded=${tokenAwarded}`);
 
 
 });
 
+app.get('/token', async (req, res) => {
+  if (!req.session.userId) {
+      return res.redirect('/login'); // Redirect to login if the user is not logged in
+  }
+
+  try {
+      const userToken = await Token.findOne({ userId: req.session.userId });
+
+      res.render('token', {
+          userName: req.session.userName,
+          tokenCount: userToken ? userToken.tokenNumber : 0
+      });
+  } catch (error) {
+      console.error('Error in /token:', error);
+      res.status(500).send('An error occurred');
+  }
+});
 
 
    
