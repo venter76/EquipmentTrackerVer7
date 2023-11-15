@@ -18,7 +18,7 @@
 <body>
     <h3 id="loadingText">Poor network signal ...</h3>
 
-    <script>
+    <!-- <script>
 
 
         let dots = 0;
@@ -32,33 +32,40 @@
             }
             loadingTextElement.textContent = `Poor network signal ${dotsStr}`;
             dots = (dots + 1) % (maxDots + 1);
-        }
+        } -->
 
 
+<script>
 
-
+        
         function checkOnlineStatus() {
-            console.log('Checking online status...');
+    console.log('Checking online status...');
+
+    // Delay the fetch call by 1 second (1000 milliseconds)
+    setTimeout(() => {
+        fetch('/checkOnline')
+            .then(response => {
+                console.log('Received response:', response.status);
+                if (response.status === 200) {
+                    console.log('Redirecting to home page...');
+                    window.location.href = '/';
+                } else {
+                    console.log('Response status is not 200:', response.status);
+                }
+            })
+            .catch(error => {
+                console.log('Fetch failed:', error.message);
+            });
+    }, 1000); // 1000 milliseconds delay
+}
+
+// Continue to call checkOnlineStatus every 5 seconds
+setInterval(checkOnlineStatus, 5000);
+
     
-            fetch('/checkOnline')
-                .then(response => {
-                    console.log('Received response:', response.status);
-                    if (response.status === 200) {
-                        console.log('Redirecting to home page...');
-                        window.location.href = '/';
-                    } else {
-                        console.log('Response status is not 200:', response.status);
-                    }
-                })
-                .catch(error => {
-                    console.log('Fetch failed:', error.message);
-                });
-        }
-    
-        // Call the function every 1 seconds
-        setInterval(checkOnlineStatus, 2000); 
+        
      // Call the updateDots function every second to update the dots animation
-     setInterval(updateDots, 200);
+    //  setInterval(updateDots, 200);
     </script>
     
 
