@@ -242,15 +242,7 @@ const User = mongoose.model('User', userSchema);
 
 
 app.get('/login', (req, res) => {
-  // Check if the user is already logged in
-  if (req.session.userId) {
-    // If logged in, redirect to the home page or dashboard
-    res.redirect('/');
-  } else {
-    // If not logged in, render the login page
-    // Pass the 'error' flash message if it exists
-    res.render('login', { error: req.flash('error') });
-  }
+  res.render('login', { error: req.flash('error') });
 });
 
 
