@@ -400,7 +400,7 @@ app.post("/detailmove", async function(req, res) {
     // Count the total number of moves
     const totalMoves = await Move.countDocuments();
     // console.log("Total Moves:", totalMoves);
-    if ((totalMoves % 6) === 0) {
+    if ((totalMoves % 4) === 0) {
       let userToken = await Token.findOne({ userId: req.session.userId });
 
       if (userToken) {
