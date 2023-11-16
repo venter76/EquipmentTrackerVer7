@@ -194,15 +194,7 @@ const User = mongoose.model('User', userSchema);
 
 
 
-  const noteSchema = new mongoose.Schema({
-    text: String,
-    date: {
-      type: Date,
-      default: Date.now
-    }
-  });
   
-  const Note = mongoose.model('Note', noteSchema);
 
 
   const rosterSchema = new mongoose.Schema({
@@ -407,7 +399,7 @@ app.post("/detailmove", async function(req, res) {
 
     // Count the total number of moves
     const totalMoves = await Move.countDocuments();
-    if ((totalMoves % 10) === 0) {
+    if ((totalMoves % 8) === 0) {
       let userToken = await Token.findOne({ userId: req.session.userId });
 
       if (userToken) {
@@ -520,7 +512,7 @@ let tokenAwarded = false;
 
     // Count the total number of moves
     const totalMoves = await Move.countDocuments();
-    if ((totalMoves % 8) === 0) {
+    if ((totalMoves % 6) === 0) {
       let userToken = await Token.findOne({ userId: req.session.userId });
 
       if (userToken) {
@@ -545,23 +537,32 @@ res.redirect(`/logo?tokenAwarded=${tokenAwarded}`);
 
 });
 
+
+
 app.get('/token', async (req, res) => {
   if (!req.session.userId) {
-      return res.redirect('/login'); // Redirect to login if the user is not logged in
+    return res.redirect('/login'); // Redirect to login if the user is not logged in
   }
 
   try {
-      const userToken = await Token.findOne({ userId: req.session.userId });
+    // Fetch tokens and populate the 'userId' field with user data from the 'User' collection
+    const allUserTokens = await Token.find({}).populate('userId', 'name');
 
-      res.render('token', {
-          userName: req.session.userName,
-          tokenCount: userToken ? userToken.tokenNumber : 0
-      });
+    // Transform data to include userName and tokenNumber
+    const tokenData = allUserTokens.map(token => ({
+      userName: token.userId.name, // Assuming 'name' is the field in the 'User' collection
+      tokenNumber: token.tokenNumber
+    }));
+
+    res.render('token', {
+      tokenData: tokenData
+    });
   } catch (error) {
-      console.error('Error in /token:', error);
-      res.status(500).send('An error occurred');
+    console.error('Error in /token:', error);
+    res.status(500).send('An error occurred');
   }
 });
+
 
 
    
