@@ -1,16 +1,16 @@
-const CACHE_NAME = 'static-cache-v23';
+const CACHE_NAME = 'static-cache-v24';
 const STATIC_ASSETS = [
     'placeholder2.html',
     '/iconLarge_1.png',
     '/iconLarge_2.png',
     '/iconLarge_3.png',
     '/token.gif',
-    '/MrF.gif',
+    // '/MrF.gif',
     '/NXRX.gif',
-    '/penguin.gif',
-    '/cat.gif',
+    // '/penguin.gif',
+    // '/cat.gif',
     '/beatles.gif',
-    '/eben.jpg',
+    // '/eben.jpg',
     '/soccer.jpg',
     'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css',
    

@@ -400,7 +400,7 @@ app.post("/detailmove", async function(req, res) {
     // Count the total number of moves
     const totalMoves = await Move.countDocuments();
     // console.log("Total Moves:", totalMoves);
-    if ((totalMoves % 8) === 0) {
+    if ((totalMoves % 10) === 0) {
       let userToken = await Token.findOne({ userId: req.session.userId });
 
       if (userToken) {
@@ -514,7 +514,7 @@ let tokenAwarded = false;
     // Count the total number of moves
     const totalMoves = await Move.countDocuments();
     // console.log("Total Moves:", totalMoves);
-    if ((totalMoves % 8) === 0) {
+    if ((totalMoves % 10) === 0) {
       let userToken = await Token.findOne({ userId: req.session.userId });
 
       if (userToken) {
