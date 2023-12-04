@@ -119,7 +119,8 @@ app.use(session({
       secure: process.env.NODE_ENV === 'production',
       sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax', // must be 'none' to enable cross-site delivery
       httpOnly: true, // prevents JavaScript from making changes
-      maxAge: 1000 * 60 * 60 * 24 * 7 * 3 // 3 weeks
+      maxAge: 1000 * 60 * 60 * 24 * 30 * 2 // 2 months
+
     }
   }));
 
