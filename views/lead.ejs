@@ -166,7 +166,7 @@
 <!-- Thyroid Shields List -->
 <div class="row">
     <% thyroidNames.forEach(function(itemName, index) { %>
-    <div class="col-md-8 col-9">
+    <div class="col-md-8 col-7">
         <div class="p-3 mb-2 rounded-pill pill-box <%= thyroidLocations[index] === 'Store' ? 'bg-green' : 'bg-red' %>">
             <div class="pill-box-content text-center">
                 <!-- href updated to point to /movethyroid -->
@@ -175,7 +175,7 @@
         </div>
     </div>
 
-    <div class="col-md-4 col-3">
+    <div class="col-md-4 col-5">
         <% if (thyroidLocations[index]) { %> <!-- Check if thyroidLocation exists -->
         <div class="p-3 mb-2 bg-dark-subtle text-black rounded-pill pill-box">
           <div class="pill-box-content text-center">
