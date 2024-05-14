@@ -1,4 +1,5 @@
 const express = require('express');
+const session = require('express-session');
 const bodyParser = require('body-parser');
 const mongoose = require("mongoose");
 const moment = require('moment');
@@ -78,8 +79,9 @@ const PORT = process.env.PORT || 3000
 app.set('view engine', 'ejs');
 
 app.use(express.static("public"));
+
 app.use(bodyParser.urlencoded({extended: true}));
-const session = require('express-session');
+
 
 
 const db_username = process.env.DB_USERNAME;
@@ -190,6 +192,14 @@ const User = mongoose.model('User', userSchema);
   });
   
   const Move = mongoose.model('Move', moveSchema);
+
+
+
+  
+
+
+
+
   
 
 
@@ -225,8 +235,35 @@ const User = mongoose.model('User', userSchema);
   const Token = mongoose.model('Token', tokenSchema);
   
   
+  
+
+const jacketSchema = new mongoose.Schema({
+  itemName: String,
+  itemLocation: {
+    type: String,
+    default: 'Store'  // Setting default value for itemLocation
+  }
+});
+
+const Jacket = mongoose.model('Jacket', jacketSchema);
+
+  
+  
+  
 
 
+const thyroidSchema = new mongoose.Schema({
+  itemNamet: String,
+  itemLocationt: {
+    type: String,
+    default: 'Store'  // Setting default value for itemLocationt
+  }
+});
+
+const Thyroid = mongoose.model('Thyroid', thyroidSchema);
+
+
+  
 
   app.get('/checkOnline', (req, res) => {
     console.log('Entered checkOnline route');
@@ -323,7 +360,7 @@ app.get('/detail', (req, res) => {
 
   // Get yesterday's date at 12:00:00 (noon)
   const start = new Date();
-  start.setDate(start.getDate() - 3); // This sets the date to yesterday
+  start.setDate(start.getDate() - 7); // This sets the date to yesterday
   start.setHours(12, 0, 0, 0); // This sets the time to noon
 
   // Get today's date at 23:59:59
@@ -354,16 +391,171 @@ app.get('/detail', (req, res) => {
 });
 
 
+app.get("/lead", function(req, res) {
+  if (req.session.userId) {
+    // User is logged in, fetch equipment data
+    Jacket.find({}, 'itemName itemLocation')
+      .sort({ number: 1 }) // Sort by 'number' in ascending order
+      .then(jackets => {
+        // Fetch thyroid data
+        Thyroid.find({}, 'itemNamet itemLocationt')
+          .sort({ number: 1 }) // Assuming you also want to sort this by a 'number' property
+          .then(thyroids => {
+            // Map jacket data
+            const itemNames = jackets.map(item => item.itemName);
+            const itemLocations = jackets.map(item => item.itemLocation);
 
-app.get('/manifest.json', (req, res) => {
-  res.sendFile(`${__dirname}/manifest.json`);
+            // Map thyroid data
+            const thyroidNames = thyroids.map(item => item.itemNamet);
+            const thyroidLocations = thyroids.map(item => item.itemLocationt);
+
+            const userName = req.session.userName; // Extract userName from the session
+
+            // Retrieve flash messages
+            const successMessages = req.flash('success');
+            const errorMessages = req.flash('error');
+
+            // Log the flash messages to see what is available
+            console.log('Success Messages:', successMessages);
+            console.log('Error Messages:', errorMessages);
+
+            // Render the lead page with all data, including flash messages
+            res.render('lead', { 
+              itemNames, 
+              itemLocations, 
+              thyroidNames, 
+              thyroidLocations,
+              userName, // Include userName in the rendering process
+              success: successMessages,
+              error: errorMessages
+            });
+          })
+          .catch(err => {
+            console.error("Error fetching thyroids:", err);
+            res.status(500).send('Internal Server Error');
+          });
+      })
+      .catch(err => {
+        console.error("Error fetching jackets:", err);
+        res.status(500).send('Internal Server Error');
+      });
+  } else {
+    // User is not logged in, render the login page
+    res.render('login', { message: req.flash('loginMessage') });
+  }
 });
 
-app.get('/service-worker.js', (req, res) => {
-  res.sendFile(`${__dirname}/service-worker.js`);
+
+
+
+app.get('/moveleadapron', (req, res) => {
+  if (!req.session.userId) {
+    // Redirect to login if user is not logged in
+    return res.redirect('/login');
+  }
+
+  const itemName = req.query.itemName;
+  const userName = req.session.userName; // Extract userName from the session
+
+  if (!itemName) {
+    return res.status(400).send("Item name is required.");
+  }
+
+  console.log(`Requested to move item: ${itemName}`);
+  console.log(`Current session user: ${userName}`);
+
+  // First find the jacket to check the current itemLocation
+  Jacket.findOne({ itemName: itemName })
+    .then(jacket => {
+      if (!jacket) {
+        console.log('Jacket not found.');
+        return res.status(404).send('Jacket not found.');
+      }
+
+      console.log(`Current item location: ${jacket.itemLocation}`);
+
+      // Check if the itemLocation is not "Store" and not the current user
+      if (jacket.itemLocation !== 'Store' && jacket.itemLocation !== userName) {
+        req.flash('error', 'Lead apron currently in use');
+        
+        return res.redirect('/lead'); // Redirect back to lead page
+      }
+
+      // Determine the new location based on current itemLocation
+      const newItemLocation = (jacket.itemLocation === userName) ? 'Store' : userName;
+      
+      // Update the jacket's itemLocation
+      Jacket.updateOne({ _id: jacket._id }, { $set: { itemLocation: newItemLocation } })
+        .then(() => {
+          if (newItemLocation === 'Store') {
+            req.flash('success', 'Lead apron returned to store successfully');
+            
+          }
+          res.redirect('/lead'); // Redirect back to the /lead route after successful update
+        })
+        .catch(err => {
+          console.error('Error updating jacket:', err);
+          res.status(500).send('Internal Server Error');
+        });
+    })
+    .catch(err => {
+      console.error('Error finding jacket:', err);
+      res.status(500).send('Internal Server Error');
+    });
 });
 
 
+app.get('/movethyroid', (req, res) => {
+  if (!req.session.userId) {
+    // Redirect to login if user is not logged in
+    return res.redirect('/login');
+  }
+
+  const itemName = req.query.itemName;
+  const userName = req.session.userName; // Extract userName from the session
+
+  if (!itemName) {
+    return res.status(400).send("Item name is required.");
+  }
+
+  // Find the thyroid shield to check the current itemLocationt
+  Thyroid.findOne({ itemNamet: itemName })
+    .then(thyroid => {
+      if (!thyroid) {
+        return res.status(404).send('Thyroid shield not found.');
+      }
+
+      console.log(`Current item location: ${thyroid.itemLocationt}`);
+
+      // Check if the itemLocationt is not "Store" and not the current user
+      if (thyroid.itemLocationt !== 'Store' && thyroid.itemLocationt !== userName) {
+        req.flash('error', 'Thyroid shield currently in use');
+        
+        return res.redirect('/lead'); // Redirect back to lead page
+      }
+
+      // Determine the new location based on current itemLocationt
+      const newItemLocation = (thyroid.itemLocationt === userName) ? 'Store' : userName;
+
+      // Update the thyroid's itemLocationt
+      Thyroid.updateOne({ _id: thyroid._id }, { $set: { itemLocationt: newItemLocation } })
+        .then(() => {
+          if (newItemLocation === 'Store') {
+            req.flash('success', 'Thyroid shield returned to store successfully');
+            
+          }
+          res.redirect('/lead'); // Redirect back to the /lead route after successful update
+        })
+        .catch(err => {
+          console.error('Error updating thyroid:', err);
+          res.status(500).send('Internal Server Error');
+        });
+    })
+    .catch(err => {
+      console.error('Error finding thyroid:', err);
+      res.status(500).send('Internal Server Error');
+    });
+});
 
 
 
@@ -616,7 +808,13 @@ app.post('/rosterupdate', async function(req, res) {
   
 
     
+app.get('/manifest.json', (req, res) => {
+  res.sendFile(`${__dirname}/manifest.json`);
+});
 
+app.get('/service-worker.js', (req, res) => {
+  res.sendFile(`${__dirname}/service-worker.js`);
+});
   
  
   

@@ -34,36 +34,47 @@
 </head>
   
 <header>
-    
-    
-     <nav class="navbar">
+  <nav class="navbar">
      
-        <div class="container-fluid">
-          
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
-                <li class="nav-item text-white">
-                
-                    <form action="/" method="get">
-                      <button type="submit" class="nav-link btn btn-link text-white">Home</button>
-                    </form>
-                  </li>
-
-              
-              <li class="nav-item">
-                <form action="/rosterset" method="get">
-                  <button type="submit" class="nav-link btn btn-link text-white">Roster</button>
+    <div class="container-fluid">
+      
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+            <li class="nav-item text-white">
+            
+                <form action="/" method="get">
+                  <button type="submit" class="nav-link btn btn-link text-white">Home</button>
                 </form>
               </li>
-             
-            </ul>
-          </div>
-        </div>
-      </nav> 
+
+              <li class="nav-item text-white">
+            
+                <form action="/lead" method="get">
+                  <button type="submit" class="nav-link btn btn-link text-white">Lead Aprons</button>
+                </form>
+              </li>
+
+         
+          <li class="nav-item">
+            <form action="/rosterset" method="get">
+              <button type="submit" class="nav-link btn btn-link text-white">Roster</button>
+            </form>
+          </li>
+          <li class="nav-item">
+            <form action="/token" method="get">
+              <button type="submit" class="nav-link btn btn-link text-white">Tokens</button>
+            </form>
+          </li>
+       
+        </ul>
+      </div>
+    </div>
+  </nav> 
     
+     
 </header>
 <body class="bg-dark">
   <h2 class="text-center text-white">Clinical Technologist Roster</h2>

@@ -41,31 +41,44 @@
 <header>
 
   <nav class="navbar">
-      <!-- fixed-top bg-body-tertiary"> -->
-         <div class="container-fluid">
-           
-           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-             <span class="navbar-toggler-icon"></span>
-           </button>
-           <div class="collapse navbar-collapse" id="navbarNav">
-             <ul class="navbar-nav">
-                 <li class="nav-item">
-                 
-                     <form action="/" method="get">
-                       <button type="submit" class="nav-link btn btn-link text-white">Home</button>
-                     </form>
-                   </li>
- 
-              
-               <li class="nav-item">
-                <form action="/rosterset" method="get">
-                  <button type="submit" class="nav-link btn btn-link text-white">Roster</button>
+     
+    <div class="container-fluid">
+      
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+            <li class="nav-item text-white">
+            
+                <form action="/" method="get">
+                  <button type="submit" class="nav-link btn btn-link text-white">Home</button>
                 </form>
               </li>
-             </ul>
-           </div>
-         </div>
-       </nav> 
+
+              <li class="nav-item text-white">
+            
+                <form action="/lead" method="get">
+                  <button type="submit" class="nav-link btn btn-link text-white">Lead Aprons</button>
+                </form>
+              </li>
+
+         
+          <li class="nav-item">
+            <form action="/rosterset" method="get">
+              <button type="submit" class="nav-link btn btn-link text-white">Roster</button>
+            </form>
+          </li>
+          <li class="nav-item">
+            <form action="/token" method="get">
+              <button type="submit" class="nav-link btn btn-link text-white">Tokens</button>
+            </form>
+          </li>
+       
+        </ul>
+      </div>
+    </div>
+  </nav> 
   </header>
 
 
@@ -155,39 +168,39 @@
                 
                 <div class="row mb-4">
                   <div class="col-12">
-              <div class="card mb-4" >
-                  <div class="card-body">
-                    <h5 class="card-title" style="color: white;">Recent moves:</h5>
-                    <br>
-                    <div class="row very-small-text" style="color: white;">
-                    <% for(let move of moves) { %>
-                      <!-- display each move's theatre, date, time, and user -->
-                      <div class="row" style="color: white;">
-                          <div class="col-3">
-                            <% if (move.base === 'returned') { %>
-                              Theatre: Returned
-                          <% } else { %>
-                              Theatre: <%= move.theatre %>
-                          <% } %>
+                      <div class="card mb-4">
+                          <div class="card-body">
+                              <h5 class="card-title" style="color: white;">Current user:</h5>
+                              <br>
+                              <!-- Check if there are any moves and display the last one -->
+                              <% if (moves && moves.length > 0) { %>
+                                <div style="color: white;">
+                                  <div class="col-6">
+                                      <strong style="font-size: larger; font-weight: bold;"> <%= moves[moves.length - 1].userName %> </strong><!-- Display the last move's user name with larger and bold font -->
+                                  </div>
+                                      <div class="col-6">
+                                          Date: <%= new Date(moves[moves.length - 1].date).toLocaleDateString("en-US", {
+                                            timeZone: "Africa/Johannesburg", 
+                                            day: '2-digit', 
+                                            month: 'short', 
+                                            year: 'numeric' 
+                                          }) %> <!-- Display the last move's date -->
+                                      </div>
+                                  </div>
+                              <% } else { %>
+                                  <div class="row small-text" style="color: white;">
+                                      <div class="col-12">
+                                          No user in the last 7 days.
+                                      </div>
+                                  </div>
+                              <% } %>
                           </div>
-                          <div class="col-3">
-                              Date: <%= new Date(move.date).toLocaleDateString("en-US", { timeZone: "Africa/Johannesburg", day: '2-digit', month: 'short' }) %> 
-                          </div>
-                          <div class="col-3">
-                              Time: <%= new Date(move.date).toLocaleTimeString("en-US", { timeZone: "Africa/Johannesburg", hour: '2-digit', minute: '2-digit', hour12: false }) %>
-                          </div>
-                          <div class="col-3">
-                              User: <%= move.userName %> <!-- Display the user's name -->
-                          </div>
-                      </div>   
-
-                    <% } %>
-                    </div>
-                    
+                      </div>
                   </div>
-                </div>
               </div>
-            </div>
+              </div>
+              
+              
                 
             
     
