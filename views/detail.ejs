@@ -90,6 +90,50 @@
     <br>
     <div class="row mb-4">
         <div class="col-12">
+
+          <br>
+                
+                <div class="row mb-4">
+                  <div class="col-12">
+                      <div class="card mb-4">
+                          <div class="card-body">
+                              <h5 class="card-title" style="color: white;">Current user:</h5>
+                              <br>
+                              <!-- Check if there are any moves and display the last one -->
+                              <% if (moves && moves.length > 0) { %>
+                                  <div style="color: white;">
+                                      <div class="col-6">
+                                          <% const lastMove = moves[moves.length - 1]; %>
+                                          <% if (lastMove.base === 'returned') { %>
+                                              Returned to base by: <strong style="font-size: larger; font-weight: bold;"> <%= lastMove.userName %> </strong>
+                                          <% } else { %>
+                                              In use by: <strong style="font-size: larger; font-weight: bold;"> <%= lastMove.userName %> </strong>
+                                          <% } %>
+                                      </div>
+                                      <div class="col-6">
+                                          Date: <%= new Date(moves[moves.length - 1].date).toLocaleDateString("en-US", {
+                                              timeZone: "Africa/Johannesburg", 
+                                              day: '2-digit', 
+                                              month: 'short', 
+                                              year: 'numeric' 
+                                          }) %> <!-- Display the last move's date -->
+                                      </div>
+                                  </div>
+                              <% } else { %>
+                                  <div class="row small-text" style="color: white;">
+                                      <div class="col-12">
+                                          No user in the last 7 days.
+                                      </div>
+                                  </div>
+                              <% } %>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              
+            
+    <br>
+    
     <div class="card mb-4" >
         <div class="card-body">
           <h5 class="card-title" style="color: white;">Move to:</h5>
@@ -164,48 +208,7 @@
            
                   
                
-                <br>
                 
-                <div class="row mb-4">
-                  <div class="col-12">
-                      <div class="card mb-4">
-                          <div class="card-body">
-                              <h5 class="card-title" style="color: white;">Current user:</h5>
-                              <br>
-                              <!-- Check if there are any moves and display the last one -->
-                              <% if (moves && moves.length > 0) { %>
-                                  <div style="color: white;">
-                                      <div class="col-6">
-                                          <% const lastMove = moves[moves.length - 1]; %>
-                                          <% if (lastMove.base === 'returned') { %>
-                                              Returned to base by: <strong style="font-size: larger; font-weight: bold;"> <%= lastMove.userName %> </strong>
-                                          <% } else { %>
-                                              In use by: <strong style="font-size: larger; font-weight: bold;"> <%= lastMove.userName %> </strong>
-                                          <% } %>
-                                      </div>
-                                      <div class="col-6">
-                                          Date: <%= new Date(moves[moves.length - 1].date).toLocaleDateString("en-US", {
-                                              timeZone: "Africa/Johannesburg", 
-                                              day: '2-digit', 
-                                              month: 'short', 
-                                              year: 'numeric' 
-                                          }) %> <!-- Display the last move's date -->
-                                      </div>
-                                  </div>
-                              <% } else { %>
-                                  <div class="row small-text" style="color: white;">
-                                      <div class="col-12">
-                                          No user in the last 7 days.
-                                      </div>
-                                  </div>
-                              <% } %>
-                          </div>
-                      </div>
-                  </div>
-              </div>
-              
-            
-    
     
 
     
