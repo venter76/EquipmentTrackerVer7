@@ -360,7 +360,7 @@ app.get('/detail', (req, res) => {
 
   // Get yesterday's date at 12:00:00 (noon)
   const start = new Date();
-  start.setDate(start.getDate() - 7); // This sets the date to yesterday
+  start.setDate(start.getDate() - 7); // This sets the date to yesterday, not seven days ago
   start.setHours(12, 0, 0, 0); // This sets the time to noon
 
   // Get today's date at 23:59:59
@@ -368,7 +368,7 @@ app.get('/detail', (req, res) => {
   end.setHours(23, 59, 59, 999);
 
   const promises = [
-    Equipment.findOne({ itemName }, 'itemName info'),
+    Equipment.findOne({ itemName }, 'itemName info itemLocation'), // Include itemLocation in the fields to retrieve
     Move.find({
       itemName,
       date: {
@@ -380,15 +380,16 @@ app.get('/detail', (req, res) => {
 
   Promise.all(promises)
     .then(([equipment, moves]) => {
-      const { itemName, info } = equipment;
-      // Include userName in the object passed to res.render
-      res.render('detail', { itemName, info, moves, userName });
+      const { itemName, info, itemLocation } = equipment; // Destructure itemLocation from the equipment document
+      // Include userName and itemLocation in the object passed to res.render
+      res.render('detail', { itemName, info, itemLocation, moves, userName });
     })
     .catch(error => {
       console.error(error);
       res.status(500).send('Internal Server Error');
     });
 });
+
 
 
 app.get("/lead", function(req, res) {
