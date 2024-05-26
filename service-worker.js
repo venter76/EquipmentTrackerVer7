@@ -1,10 +1,9 @@
-const CACHE_NAME = 'static-cache-v28';
+const CACHE_NAME = 'static-cache-v29';
 const STATIC_ASSETS = [
     'placeholder2.html',
     '/iconLarge_1.png',
     '/iconLarge_2.png',
     '/iconLarge_3.png',
-    '/login',
     '/token.gif',
     // '/MrF.gif',
     '/NXRX.gif',
