@@ -105,24 +105,25 @@
                       
                         <!-- Check if there are any moves and display the last one -->
                         <% if (moves && moves.length > 0) { %>
-                            <div style="color: white;">
-                                <div class="col-6">
-                                    <% const lastMove = moves[moves.length - 1]; %>
-                                    <% if (lastMove.base === 'returned') { %>
-                                        Returned to base by: <strong style="font-size: larger; font-weight: bold;"> <%= lastMove.userName %> </strong>
-                                    <% } else { %>
-                                        In use by: <strong style="font-size: larger; font-weight: bold;"> <%= lastMove.userName %> </strong>
-                                    <% } %>
-                                </div>
-                                <div class="col-6">
-                                    Date: <%= new Date(moves[moves.length - 1].date).toLocaleDateString("en-US", {
-                                        timeZone: "Africa/Johannesburg", 
-                                        day: '2-digit', 
-                                        month: 'short', 
-                                        year: 'numeric' 
-                                    }) %> <!-- Display the last move's date -->
-                                </div>
+                          <div style="color: white;">
+                            <div class="col-6">
+                                <% const lastMove = moves[moves.length - 1]; %>
+                                <% if (lastMove.base === 'returned') { %>
+                                    Returned to base by: <strong style="font-size: larger; font-weight: bold;"> <%= lastMove.userName %> </strong>
+                                <% } else { %>
+                                    <strong style="font-size: larger; font-weight: bold;"> <%= lastMove.userName %> </strong>
+                                <% } %>
                             </div>
+                            <div class="col-6">
+                                <strong style="font-size: larger; font-weight: bold;">Date:</strong> <%= new Date(moves[moves.length - 1].date).toLocaleDateString("en-US", {
+                                    timeZone: "Africa/Johannesburg", 
+                                    day: '2-digit', 
+                                    month: 'short', 
+                                    year: 'numeric' 
+                                }) %> <!-- Display the last move's date -->
+                            </div>
+                        </div>
+                        
                         <% } else { %>
                             <div class="row small-text" style="color: white;">
                                 <div class="col-12">
