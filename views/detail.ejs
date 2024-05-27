@@ -83,7 +83,8 @@
 
 
 
-  <body class="bg-dark">
+  <body style="background-color: #008B8B;">
+
 
     <div class="container">
       <h1 style="padding-left: 60px; color: white;"><%= itemName %></h1>
@@ -101,27 +102,33 @@
                         <!-- New line for item location -->
                         <h5 class="card-title" style="color: white;">Location: <strong style="font-size: larger;"> <%= itemLocation %> </strong></h5>
 
-                        <h5 class="card-title" style="color: white;">Current user:</h5>
-                      
+                        <h5 class="card-title" style="color: white; display: inline;">Current user:</h5>
+
                         <!-- Check if there are any moves and display the last one -->
                         <% if (moves && moves.length > 0) { %>
-                          <div style="color: white;">
-                            <div class="col-6">
-                                <% const lastMove = moves[moves.length - 1]; %>
-                                <% if (lastMove.base === 'returned') { %>
-                                    Returned to base by: <strong style="font-size: larger; font-weight: bold;"> <%= lastMove.userName %> </strong>
-                                <% } else { %>
-                                    <strong style="font-size: larger; font-weight: bold;"> <%= lastMove.userName %> </strong>
-                                <% } %>
-                            </div>
-                            <div class="col-6">
-                                <strong style="font-size: larger; font-weight: bold;">Date:</strong> <%= new Date(moves[moves.length - 1].date).toLocaleDateString("en-US", {
+                          <% const lastMove = moves[moves.length - 1]; %>
+                          <div style="color: white; display: inline;">
+                            <% if (lastMove.base === 'returned') { %>
+                              <span>Returned to base by: <strong style="font-size: larger; font-weight: bold;"><%= lastMove.userName %></strong></span>
+                            <% } else { %>
+                              <span><strong style="font-size: larger; font-weight: bold"><%= lastMove.userName %></strong></span>
+                            <% } %>
+                          </div>
+                        
+                        
+
+                          <div class="col-6">
+                            <strong style="color: white; font-size: larger">Date:</strong>
+                            <span style="color: white; font-weight: bold; font-size: larger">
+                                <%= new Date(moves[moves.length - 1].date).toLocaleDateString("en-US", {
                                     timeZone: "Africa/Johannesburg", 
                                     day: '2-digit', 
                                     month: 'short', 
                                     year: 'numeric' 
                                 }) %> <!-- Display the last move's date -->
-                            </div>
+                            </span>
+                        </div>
+                        
                         </div>
                         
                         <% } else { %>
