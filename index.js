@@ -243,7 +243,7 @@ const User = mongoose.model('User', userSchema);
       type: String,
       default: 'Store'  // Setting default value for itemLocation
     },
-    number: Number
+    itemNumber: Number
     
   });
   
@@ -253,30 +253,22 @@ const User = mongoose.model('User', userSchema);
     itemNamet: String,
     itemLocationt: {
       type: String,
-      default: 'Store'  // Setting default value for itemLocationt
+      default: 'Store',
+      itemNumbert: Number  // Setting default value for itemLocationt
     }
     
   });
   
   const Thyroid = mongoose.model('Thyroid', thyroidSchema);
 
-  const thyroSchema = new mongoose.Schema({
-    itemNamet: String,
-    itemLocationt: {
-      type: String,
-      default: 'Store'  // Setting default value for itemLocationt
-    }
-    
-  });
   
-  const Thyro = mongoose.model('Thyro', thyroSchema);
 
   
 
-  app.get('/checkOnline', (req, res) => {
-    console.log('Entered checkOnline route');
-    res.status(200).send('Online');
-});
+//   app.get('/checkOnline', (req, res) => {
+//     console.log('Entered checkOnline route');
+//     res.status(200).send('Online');
+// });
 
 
 app.get('/login', (req, res) => {
@@ -403,12 +395,12 @@ app.get('/detail', (req, res) => {
 app.get("/lead", function(req, res) {
   if (req.session.userId) {
     // User is logged in, fetch equipment data
-    Jacket.find({}, 'itemName itemLocation')
-      .sort({ number: 1 }) // Sort by 'number' in ascending order
+    Jacket.find({}, 'itemName itemLocation itemNumber')
+      .sort({ itemNumber: 1 }) // Sort by 'itemNumber' in ascending order
       .then(jackets => {
         // Fetch thyroid data
-        Thyroid.find({}, 'itemNamet itemLocationt')
-          .sort({ number: 1 }) // Assuming you also want to sort this by a 'number' property
+        Thyroid.find({}, 'itemNamet itemLocationt itemNumbert')
+          .sort({ itemNumbert: 1 }) // Sort by 'itemNumbert' in ascending order
           .then(thyroids => {
             // Map jacket data
             const itemNames = jackets.map(item => item.itemName);
@@ -423,10 +415,6 @@ app.get("/lead", function(req, res) {
             // Retrieve flash messages
             const successMessages = req.flash('success');
             const errorMessages = req.flash('error');
-
-            // Log the flash messages to see what is available
-            // console.log('Success Messages:', successMessages);
-            // console.log('Error Messages:', errorMessages);
 
             // Render the lead page with all data, including flash messages
             res.render('lead', { 
@@ -458,8 +446,9 @@ app.get("/lead", function(req, res) {
 
 
 app.get('/moveleadapron', (req, res) => {
+  console.log('Request received for moving lead apron');
   if (!req.session.userId) {
-    // Redirect to login if user is not logged in
+    console.log('User not logged in. Redirecting to login page.');
     return res.redirect('/login');
   }
 
@@ -467,6 +456,7 @@ app.get('/moveleadapron', (req, res) => {
   const userName = req.session.userName; // Extract userName from the session
 
   if (!itemName) {
+    console.log('Item name is required but not provided.');
     return res.status(400).send("Item name is required.");
   }
 
@@ -478,40 +468,50 @@ app.get('/moveleadapron', (req, res) => {
     .then(jacket => {
       if (!jacket) {
         console.log('Jacket not found.');
-        return res.status(404).send('Jacket not found.');
+        req.flash('error', 'Jacket not found.');
+        return res.redirect('/lead');
       }
 
       console.log(`Current item location: ${jacket.itemLocation}`);
 
       // Check if the itemLocation is not "Store" and not the current user
       if (jacket.itemLocation !== 'Store' && jacket.itemLocation !== userName) {
+        console.log('Lead apron currently in use by another user.');
         req.flash('error', 'Lead apron currently in use');
-        
         return res.redirect('/lead'); // Redirect back to lead page
       }
 
       // Determine the new location based on current itemLocation
       const newItemLocation = (jacket.itemLocation === userName) ? 'Store' : userName;
-      
+      console.log(`Updating item location to: ${newItemLocation}`);
+
       // Update the jacket's itemLocation
       Jacket.updateOne({ _id: jacket._id }, { $set: { itemLocation: newItemLocation } })
         .then(() => {
           if (newItemLocation === 'Store') {
+            console.log('Lead apron returned to store successfully');
             req.flash('success', 'Lead apron returned to store successfully');
-            
+          } else {
+            console.log(`Lead apron assigned to ${userName} successfully`);
+            req.flash('success', `Lead apron assigned to ${userName} successfully`);
           }
           res.redirect('/lead'); // Redirect back to the /lead route after successful update
         })
         .catch(err => {
           console.error('Error updating jacket:', err);
-          res.status(500).send('Internal Server Error');
+          req.flash('error', 'Error updating jacket location.');
+          res.redirect('/lead'); // Redirect back to lead page on error
         });
     })
     .catch(err => {
       console.error('Error finding jacket:', err);
-      res.status(500).send('Internal Server Error');
+      req.flash('error', 'Error finding jacket.');
+      res.redirect('/lead'); // Redirect back to lead page on error
     });
 });
+
+
+
 
 
 app.get('/movethyroid', (req, res) => {

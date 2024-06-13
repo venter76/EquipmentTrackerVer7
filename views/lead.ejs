@@ -131,27 +131,27 @@
       </div>
   <% } %>
 
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-12">
-                <h3 class="text-center text-white">Radiation protection</h3>
-                
-            </div>
-        </div>
-        <br>
-      <!-- Jackets List -->
-<div class="row">
-  <% itemNames.forEach(function(itemName, index) { %>
-  <div class="col-md-8 col-7">
-      <div class="p-3 mb-2 rounded-pill pill-box <%= itemLocations[index] === 'Store' ? 'bg-green' : 'bg-red' %>">
-          <div class="pill-box-content text-center">
-              <!-- href updated to point to /moveleadapron -->
-              <a class="myLink" href="/moveleadapron?itemName=<%= encodeURIComponent(itemName) %>"><%= itemName %></a>
-          </div>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-12">
+        <h3 class="text-center text-white">Radiation protection</h3>
       </div>
-  </div>
+    </div>
+    <br>
   
-    <div class="col-md-4 col-5">
+    <!-- Jackets List -->
+    <div class="row">
+      <% itemNames.forEach(function(itemName, index) { %>
+      <div class="col-md-8 col-7">
+        <div class="p-3 mb-2 rounded-pill pill-box <%= itemLocations[index] === 'Store' ? 'bg-green' : 'bg-red' %>">
+          <div class="pill-box-content text-center">
+            <!-- href updated to point to /moveleadapron -->
+            <a class="myLink" href="/moveleadapron?itemName=<%= encodeURIComponent(itemName) %>"><%= itemName %></a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-md-4 col-5">
         <% if (itemLocations[index]) { %> <!-- Check if itemLocation exists -->
         <div class="p-3 mb-2 bg-dark-subtle text-black rounded-pill pill-box">
           <div class="pill-box-content text-center">
@@ -159,24 +159,23 @@
           </div>
         </div>
         <% } %>
+      </div>
+      <% }); %>
     </div>
-    <% }); %>
-</div>
-    
-    
-<!-- Thyroid Shields List -->
-<div class="row">
-    <% thyroidNames.forEach(function(itemName, index) { %>
-    <div class="col-md-8 col-7">
+  
+    <!-- Thyroid Shields List -->
+    <div class="row">
+      <% thyroidNames.forEach(function(itemNamet, index) { %>
+      <div class="col-md-8 col-7">
         <div class="p-3 mb-2 rounded-pill pill-box <%= thyroidLocations[index] === 'Store' ? 'bg-green' : 'bg-red' %>">
-            <div class="pill-box-content text-center">
-                <!-- href updated to point to /movethyroid -->
-                <a class="myLink" href="/movethyroid?itemName=<%= encodeURIComponent(itemName) %>"><%= itemName %></a>
-            </div>
+          <div class="pill-box-content text-center">
+            <!-- href updated to point to /movethyroid -->
+            <a class="myLink" href="/movethyroid?itemNamet=<%= encodeURIComponent(itemNamet) %>"><%= itemNamet %></a>
+          </div>
         </div>
-    </div>
-
-    <div class="col-md-4 col-5">
+      </div>
+  
+      <div class="col-md-4 col-5">
         <% if (thyroidLocations[index]) { %> <!-- Check if thyroidLocation exists -->
         <div class="p-3 mb-2 bg-dark-subtle text-black rounded-pill pill-box">
           <div class="pill-box-content text-center">
@@ -184,35 +183,36 @@
           </div>
         </div>
         <% } %>
+      </div>
+      <% }); %>
     </div>
-    <% }); %>
-</div>
 
   
 <script>
-  // Function to reload the page
-  function reloadHomePage() {
-    window.location.reload();
-  }
+//   // Function to reload the page
+//   function reloadHomePage() {
+//     window.location.reload();
+//   }
 
 
   
-  setInterval(reloadHomePage, 15000);
-</script>
+//   setInterval(reloadHomePage, 30000);
+
+// Add event listeners to prevent multiple clicks
+document.querySelectorAll('.myLink').forEach(link => {
+      link.addEventListener('click', function(event) {
+        event.preventDefault(); // Prevent the default link behavior
+        if (!this.dataset.clicked) {
+          this.dataset.clicked = true; // Mark the link as clicked
+          window.location.href = this.href; // Navigate to the link
+        }
+      });
+    });
+  </script>
+// </script>
 
     <!-- <script src="index.js"></script> -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous">
-        </script>
-        <script>
-        if ('serviceWorker' in navigator) {
-          navigator.serviceWorker.register('/service-worker.js')
-          .then(function(registration) {
-            console.log('Service Worker registered with scope:', registration.scope);
-          })
-          .catch(function(error) {
-            console.error('Service Worker registration failed:', error);
-          });
-        } 
         </script>
         
         <script src="https://cdn.jsdelivr.net/npm/jsqr@1.3.1/dist/jsQR.js"></script>
