@@ -237,30 +237,27 @@ const User = mongoose.model('User', userSchema);
   
   
 
-const jacketSchema = new mongoose.Schema({
-  itemName: String,
-  itemLocation: {
-    type: String,
-    default: 'Store'  // Setting default value for itemLocation
-  }
-});
-
-const Jacket = mongoose.model('Jacket', jacketSchema);
-
+  const jacketSchema = new mongoose.Schema({
+    itemName: String,
+    itemLocation: {
+      type: String,
+      default: 'Store'  // Setting default value for itemLocation
+    }
+    
+  });
   
+  const Jacket = mongoose.model('Jacket', jacketSchema);
   
+  const thyroidSchema = new mongoose.Schema({
+    itemNamet: String,
+    itemLocationt: {
+      type: String,
+      default: 'Store'  // Setting default value for itemLocationt
+    }
+    
+  });
   
-
-
-const thyroidSchema = new mongoose.Schema({
-  itemNamet: String,
-  itemLocationt: {
-    type: String,
-    default: 'Store'  // Setting default value for itemLocationt
-  }
-});
-
-const Thyroid = mongoose.model('Thyroid', thyroidSchema);
+  const Thyroid = mongoose.model('Thyroid', thyroidSchema);
 
 
   
@@ -417,8 +414,8 @@ app.get("/lead", function(req, res) {
             const errorMessages = req.flash('error');
 
             // Log the flash messages to see what is available
-            console.log('Success Messages:', successMessages);
-            console.log('Error Messages:', errorMessages);
+            // console.log('Success Messages:', successMessages);
+            // console.log('Error Messages:', errorMessages);
 
             // Render the lead page with all data, including flash messages
             res.render('lead', { 
