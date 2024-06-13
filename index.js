@@ -242,7 +242,8 @@ const User = mongoose.model('User', userSchema);
     itemLocation: {
       type: String,
       default: 'Store'  // Setting default value for itemLocation
-    }
+    },
+    number: Number
     
   });
   
@@ -259,6 +260,16 @@ const User = mongoose.model('User', userSchema);
   
   const Thyroid = mongoose.model('Thyroid', thyroidSchema);
 
+  const thyroSchema = new mongoose.Schema({
+    itemNamet: String,
+    itemLocationt: {
+      type: String,
+      default: 'Store'  // Setting default value for itemLocationt
+    }
+    
+  });
+  
+  const Thyro = mongoose.model('Thyro', thyroSchema);
 
   
 
