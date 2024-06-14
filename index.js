@@ -546,24 +546,29 @@ app.get('/movethyroid', (req, res) => {
       // Determine the new location based on current itemLocationt
       const newItemLocation = (thyroid.itemLocationt === userName) ? 'Store' : userName;
 
-      // Update the thyroid's itemLocationt
-      Thyroid.updateOne({ _id: thyroid._id }, { $set: { itemLocationt: newItemLocation } })
-        .then(() => {
-          if (newItemLocation === 'Store') {
-            req.flash('success', 'Thyroid shield returned to store successfully');
-            
-          }
-          res.redirect('/lead'); // Redirect back to the /lead route after successful update
-        })
-        .catch(err => {
-          console.error('Error updating thyroid:', err);
-          res.status(500).send('Internal Server Error');
-        });
-    })
-    .catch(err => {
-      console.error('Error finding thyroid:', err);
-      res.status(500).send('Internal Server Error');
-    });
+       // Update the thyroid shield's itemLocationt
+       Thyroid.updateOne({ _id: thyroid._id }, { $set: { itemLocationt: newItemLocation } })
+       .then(() => {
+         if (newItemLocation === 'Store') {
+           console.log('Thyroid shield returned to store successfully');
+           req.flash('success', 'Thyroid shield returned to store successfully');
+         } else {
+           console.log(`Thyroid shield assigned to ${userName} successfully`);
+           req.flash('success', `Thyroid shield assigned to ${userName} successfully`);
+         }
+         res.redirect('/lead'); // Redirect back to the /lead route after successful update
+       })
+       .catch(err => {
+         console.error('Error updating thyroid shield:', err);
+         req.flash('error', 'Error updating thyroid shield location.');
+         res.redirect('/lead'); // Redirect back to lead page on error
+       });
+   })
+   .catch(err => {
+     console.error('Error finding thyroid shield:', err);
+     req.flash('error', 'Error finding thyroid shield.');
+     res.redirect('/lead'); // Redirect back to lead page on error
+   });
 });
 
 
