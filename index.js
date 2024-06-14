@@ -171,13 +171,7 @@ const User = mongoose.model('User', userSchema);
 
 
 
-  const bookingSchema = new mongoose.Schema({
-    itemName: String,
-    theatre: String,
-    date: Date
-  });
   
-  const Booking = mongoose.model('Booking', bookingSchema);
 
 
   const moveSchema = new mongoose.Schema({
@@ -265,10 +259,10 @@ const User = mongoose.model('User', userSchema);
 
   
 
-//   app.get('/checkOnline', (req, res) => {
-//     console.log('Entered checkOnline route');
-//     res.status(200).send('Online');
-// });
+  app.get('/checkOnline', (req, res) => {
+    console.log('Entered checkOnline route');
+    res.status(200).send('Online');
+});
 
 
 app.get('/login', (req, res) => {
@@ -446,9 +440,9 @@ app.get("/lead", function(req, res) {
 
 
 app.get('/moveleadapron', (req, res) => {
-  console.log('Request received for moving lead apron');
+  // console.log('Request received for moving lead apron');
   if (!req.session.userId) {
-    console.log('User not logged in. Redirecting to login page.');
+    // console.log('User not logged in. Redirecting to login page.');
     return res.redirect('/login');
   }
 
@@ -456,55 +450,55 @@ app.get('/moveleadapron', (req, res) => {
   const userName = req.session.userName; // Extract userName from the session
 
   if (!itemName) {
-    console.log('Item name is required but not provided.');
+    // console.log('Item name is required but not provided.');
     return res.status(400).send("Item name is required.");
   }
 
-  console.log(`Requested to move item: ${itemName}`);
-  console.log(`Current session user: ${userName}`);
+  // console.log(`Requested to move item: ${itemName}`);
+  // console.log(`Current session user: ${userName}`);
 
   // First find the jacket to check the current itemLocation
   Jacket.findOne({ itemName: itemName })
     .then(jacket => {
       if (!jacket) {
-        console.log('Jacket not found.');
+        // console.log('Jacket not found.');
         req.flash('error', 'Jacket not found.');
         return res.redirect('/lead');
       }
 
-      console.log(`Current item location: ${jacket.itemLocation}`);
+      // console.log(`Current item location: ${jacket.itemLocation}`);
 
       // Check if the itemLocation is not "Store" and not the current user
       if (jacket.itemLocation !== 'Store' && jacket.itemLocation !== userName) {
-        console.log('Lead apron currently in use by another user.');
+        // console.log('Lead apron currently in use by another user.');
         req.flash('error', 'Lead apron currently in use');
         return res.redirect('/lead'); // Redirect back to lead page
       }
 
       // Determine the new location based on current itemLocation
       const newItemLocation = (jacket.itemLocation === userName) ? 'Store' : userName;
-      console.log(`Updating item location to: ${newItemLocation}`);
+      // console.log(`Updating item location to: ${newItemLocation}`);
 
       // Update the jacket's itemLocation
       Jacket.updateOne({ _id: jacket._id }, { $set: { itemLocation: newItemLocation } })
         .then(() => {
           if (newItemLocation === 'Store') {
-            console.log('Lead apron returned to store successfully');
+            // console.log('Lead apron returned to store successfully');
             req.flash('success', 'Lead apron returned to store successfully');
           } else {
-            console.log(`Lead apron assigned to ${userName} successfully`);
+            // console.log(`Lead apron assigned to ${userName} successfully`);
             req.flash('success', `Lead apron assigned to ${userName} successfully`);
           }
           res.redirect('/lead'); // Redirect back to the /lead route after successful update
         })
         .catch(err => {
-          console.error('Error updating jacket:', err);
+          // console.error('Error updating jacket:', err);
           req.flash('error', 'Error updating jacket location.');
           res.redirect('/lead'); // Redirect back to lead page on error
         });
     })
     .catch(err => {
-      console.error('Error finding jacket:', err);
+      // console.error('Error finding jacket:', err);
       req.flash('error', 'Error finding jacket.');
       res.redirect('/lead'); // Redirect back to lead page on error
     });
@@ -534,7 +528,7 @@ app.get('/movethyroid', (req, res) => {
         return res.status(404).send('Thyroid shield not found.');
       }
 
-      console.log(`Current item location: ${thyroid.itemLocationt}`);
+      // console.log(`Current item location: ${thyroid.itemLocationt}`);
 
       // Check if the itemLocationt is not "Store" and not the current user
       if (thyroid.itemLocationt !== 'Store' && thyroid.itemLocationt !== userName) {
@@ -550,16 +544,16 @@ app.get('/movethyroid', (req, res) => {
        Thyroid.updateOne({ _id: thyroid._id }, { $set: { itemLocationt: newItemLocation } })
        .then(() => {
          if (newItemLocation === 'Store') {
-           console.log('Thyroid shield returned to store successfully');
+          //  console.log('Thyroid shield returned to store successfully');
            req.flash('success', 'Thyroid shield returned to store successfully');
          } else {
-           console.log(`Thyroid shield assigned to ${userName} successfully`);
+          //  console.log(`Thyroid shield assigned to ${userName} successfully`);
            req.flash('success', `Thyroid shield assigned to ${userName} successfully`);
          }
          res.redirect('/lead'); // Redirect back to the /lead route after successful update
        })
        .catch(err => {
-         console.error('Error updating thyroid shield:', err);
+        //  console.error('Error updating thyroid shield:', err);
          req.flash('error', 'Error updating thyroid shield location.');
          res.redirect('/lead'); // Redirect back to lead page on error
        });
