@@ -520,7 +520,7 @@ app.get('/movethyroid', (req, res) => {
     return res.redirect('/login');
   }
 
-  const itemName = req.query.itemName;
+  const itemName = req.query.itemNamet;
   const userName = req.session.userName; // Extract userName from the session
 
   if (!itemName) {
