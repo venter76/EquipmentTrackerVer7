@@ -199,15 +199,15 @@
   setInterval(reloadHomePage, 30000);
 
 // Add event listeners to prevent multiple clicks
-document.querySelectorAll('.myLink').forEach(link => {
-      link.addEventListener('click', function(event) {
-        event.preventDefault(); // Prevent the default link behavior
-        if (!this.dataset.clicked) {
-          this.dataset.clicked = true; // Mark the link as clicked
-          window.location.href = this.href; // Navigate to the link
-        }
-      });
-    });
+// document.querySelectorAll('.myLink').forEach(link => {
+//       link.addEventListener('click', function(event) {
+//         event.preventDefault(); // Prevent the default link behavior
+//         if (!this.dataset.clicked) {
+//           this.dataset.clicked = true; // Mark the link as clicked
+//           window.location.href = this.href; // Navigate to the link
+//         }
+//       });
+//     });
   </script>
 // </script>
 
