@@ -97,7 +97,7 @@ const connectDB = async () => {
       useUnifiedTopology: true
     });
 
-    console.log('Connected to MongoDB Atlas:', conn.connection.host);
+    // console.log('Connected to MongoDB Atlas:', conn.connection.host);
   } catch (error) {
     console.error('Error connecting to MongoDB Atlas:', error);
     process.exit(1);
@@ -260,7 +260,7 @@ const User = mongoose.model('User', userSchema);
   
 
   app.get('/checkOnline', (req, res) => {
-    console.log('Entered checkOnline route');
+    // console.log('Entered checkOnline route');
     res.status(200).send('Online');
 });
 
@@ -277,29 +277,29 @@ app.post('/login', async (req, res) => {
   const { name, surname, password } = req.body;
   const fixedPasswordHash = process.env.FIXED_PASSWORD_HASH;
 
-  console.log('Login attempt:', { name, surname });
+  // console.log('Login attempt:', { name, surname });
 
   try {
     let user = await User.findOne({ name, surname });
-    console.log('User found:', user);
+    // console.log('User found:', user);
 
     if (!user) {
       console.log('No existing user found, creating new user');
       const hashedPassword = await bcrypt.hash(password, 10);
       user = new User({ name, surname, password: hashedPassword });
       await user.save();
-      console.log('New user created:', user);
+      // console.log('New user created:', user);
     }
 
     const isMatch = user.password 
                     ? await bcrypt.compare(password, user.password)
                     : await bcrypt.compare(password, fixedPasswordHash);
-    console.log('Password match:', isMatch);
+    // console.log('Password match:', isMatch);
 
     if (isMatch) {
       req.session.userId = user._id;
       req.session.userName = user.name;
-      console.log('Session before save:', req.session);
+      // console.log('Session before save:', req.session);
 
       req.session.save(err => {
         if (err) {
